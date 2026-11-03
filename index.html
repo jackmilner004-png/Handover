@@ -181,6 +181,11 @@ fieldset.field{border:0;padding:0;margin:16px 0 0}
 .pl .btns{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
 .pl h3{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:18px 0 0}
 .backup textarea{font:400 12.5px/1.45 var(--f-mono);min-height:120px}
+.frow{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px 14px;align-items:end;border:1px solid var(--rule);border-radius:4px;padding:12px;margin-top:10px}
+.frow .fl{display:grid;gap:6px;font:600 13px var(--f-display);min-width:0}
+.frow .fl.wide{grid-column:1/-1}
+.frow input,.frow select{width:100%;font:400 15.5px var(--f-display);color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:8px 10px;min-width:0}
+.frow .btn{justify-self:start}
 
 /* search results */
 .results{max-width:800px}
@@ -714,6 +719,22 @@ function functionsPage(p){
 }
 
 /* ---------- editor ---------- */
+function fileRow(f){
+  return `<div class="frow"><label class="fl">Type<select data-f="type">${Object.keys(TYPE).map(k=>`<option value="${k}"${f.type===k?' selected':''}>${TYPE[k]}</option>`).join('')}</select></label>
+   <label class="fl">Title or file name<input type="text" data-f="name" maxlength="200" value="${esc(f.name)}"></label>
+   <label class="fl wide">Link<input type="text" data-f="link" inputmode="url" maxlength="1000" placeholder="https://" value="${esc(f.link)}"></label>
+   <label class="fl">Note (optional)<input type="text" data-f="note" maxlength="200" value="${esc(f.note)}"></label>
+   <button type="button" class="btn small danger" data-act="drop-file">Delete this file</button></div>`;
+}
+let droppedLinks=0;
+function filesFromForm(){
+  droppedLinks=0;
+  return $$('#ed-files-list .frow',main).map(r=>{
+    const g=k=>{const e=r.querySelector('[data-f="'+k+'"]');return e?e.value.trim():''};
+    const link=g('link');if(link&&!safeLink(link))droppedLinks++;
+    return {name:g('name')||link,type:g('type'),note:g('note'),link:link};
+  }).filter(f=>f.name);
+}
 function editorPage(p){
   const isCh=p.group==='chapter',base=BASE_IDS[p.id]&&overrides[p.id]&&overrides[p.id].page;
   const modeText=store.mode==='shared'?'Saved changes show for everyone who opens this page.':'Saved changes are kept on this device only.';
@@ -731,7 +752,9 @@ function editorPage(p){
    <div class="field"><label for="ed-body">Content</label><textarea id="ed-body" class="tall" spellcheck="true">${esc(bodyToText(p.sections))}</textarea>
     <details class="guide"><summary>How to format the content</summary><pre>${esc('## Section heading\nA plain line under a heading is a short note\n[ ] A checklist item\n1. A numbered step\n- A bullet\n  - A sub-point (indent two spaces)\n= TERM | meaning')}</pre></details></div>
    <div class="field"><label for="ed-notes">Notes</label><textarea id="ed-notes" rows="3">${esc(p.notes.join('\n\n'))}</textarea><span class="hint">Each note is a paragraph. Leave a blank line between notes.</span></div>
-   <div class="field"><label for="ed-files">Files</label><textarea id="ed-files" rows="4">${esc(filesToText(p.files))}</textarea><span class="hint">One per line: type | name | note | link. Type is xlsx, pptx, docx, pdf or folder. The link is optional and must start with https.</span></div>
+   <fieldset class="field"><legend>Files used</legend><div id="ed-files-list">${p.files.map(fileRow).join('')}</div>
+    <div><button type="button" class="btn small" data-act="add-file">Add a file</button></div>
+    <span class="hint">Give each file a title and paste its link. The link must start with https. Leave it empty if you do not have it yet.</span></fieldset>
    <div class="field"><label for="ed-contacts">Contacts</label><textarea id="ed-contacts" rows="3">${esc(contactsToText(p.contacts))}</textarea><span class="hint">One per line: name | what they help with.</span></div>
    <div class="actions"><button type="button" class="btn primary" data-act="save">Save changes</button><button type="button" class="btn" data-act="cancel">Cancel</button>
     ${base?'<button type="button" class="btn danger" data-act="reset">Reset to the starting content</button>':''}<span class="hint" style="font:400 13px var(--f-display);color:var(--muted)">${esc(modeText)}</span></div>`;
@@ -743,7 +766,7 @@ function collectEdit(p){
   const np=Object.assign({},p,{title:v('ed-title').trim()||p.title,intro:v('ed-intro').trim(),
     sections:textToBody(v('ed-body')),
     notes:v('ed-notes').split(/\n\s*\n/).map(t=>t.trim()).filter(Boolean),
-    files:textToFiles(v('ed-files')),contacts:textToContacts(v('ed-contacts'))});
+    files:filesFromForm(),contacts:textToContacts(v('ed-contacts'))});
   if(isCh){
     np.status=v('ed-status');np.when=v('ed-when').trim();np.slot=v('ed-slot').trim();np.reviewed=v('ed-reviewed').trim();
     np.cadence=$$('input[name=cad]:checked',main).map(i=>i.value);
@@ -840,9 +863,9 @@ async function restorePage(id){
 }
 async function savePage(){
   const p=byId(editing&&editing.id);if(!p)return;
-  const np=collectEdit(p);
+  const np=collectEdit(p),dropped=droppedLinks;
   const ok=await run(()=>setOverride(p.id,{page:np}),'Saved.');
-  if(ok){editing=null}
+  if(ok){editing=null;if(dropped)say('Saved, but '+dropped+(dropped===1?' link was':' links were')+' not kept. Links must start with https.',true)}
   computePages();buildToc();buildIndex();show(current,null,true);
 }
 async function resetPage(){
@@ -888,6 +911,12 @@ document.addEventListener('click',e=>{
   if(act==='edit'){editing={id:current};notice='';show(current,null)}
   else if(act==='edit-page'){editing={id:id};notice='';goTo(id)}
   else if(act==='cancel'){editing=null;notice='';show(current,null)}
+  else if(act==='add-file'){
+    const l=$('#ed-files-list');if(!l)return;
+    l.insertAdjacentHTML('beforeend',fileRow({type:'xlsx',name:'',note:'',link:''}));
+    const n=l.querySelectorAll('.frow');const i=n[n.length-1].querySelector('[data-f="name"]');if(i)i.focus();
+  }
+  else if(act==='drop-file'){const r=b.closest('.frow');if(r)r.remove()}
   else if(act==='save')savePage();
   else if(act==='reset')resetPage();
   else if(act==='add')addPage();
