@@ -460,7 +460,7 @@ function normPage(p,id,group){
   o.prompts=A(p.prompts).map(S).filter(Boolean).slice(0,10);
   o.sections=A(p.sections).slice(0,60).map(s=>{s=s||{};return {h:S(s.h),kind:KINDS.indexOf(s.kind)>=0?s.kind:'bullets',note:S(s.note),
     items:A(s.items).slice(0,300).map(it=>{if(typeof it==='string')return S(it);const sub=A(it&&it.sub).map(S);return sub.length?{t:S(it&&it.t),sub:sub}:S(it&&it.t)})}});
-  o.files=A(p.files).map(f=>{f=f||{};return {name:S(f.name).trim(),type:TYPE[f.type]?f.type:'file',note:S(f.note),link:safeLink(f.link)}}).filter(f=>f.name);
+  o.files=A(p.files).map(f=>{f=f||{};return {name:S(f.name).trim(),type:TYPE[f.type]?f.type:'file',note:S(f.note)==='undefined'?'':S(f.note),link:safeLink(f.link)}}).filter(f=>f.name);
   o.notes=A(p.notes).map(S).map(t=>t.trim()).filter(Boolean);
   o.contacts=A(p.contacts).map(x=>({name:S(x&&x.name).trim(),why:S(x&&x.why).trim()})).filter(x=>x.name);
   return o;
@@ -721,9 +721,9 @@ function functionsPage(p){
 /* ---------- editor ---------- */
 function fileRow(f){
   return `<div class="frow"><label class="fl">Type<select data-f="type">${Object.keys(TYPE).map(k=>`<option value="${k}"${f.type===k?' selected':''}>${TYPE[k]}</option>`).join('')}</select></label>
-   <label class="fl">Title or file name<input type="text" data-f="name" maxlength="200" value="${esc(f.name)}"></label>
-   <label class="fl wide">Link<input type="text" data-f="link" inputmode="url" maxlength="1000" placeholder="https://" value="${esc(f.link)}"></label>
-   <label class="fl">Note (optional)<input type="text" data-f="note" maxlength="200" value="${esc(f.note)}"></label>
+   <label class="fl">Title or file name<input type="text" data-f="name" maxlength="200" value="${esc(f.name||'')}"></label>
+   <label class="fl wide">Link<input type="text" data-f="link" inputmode="url" maxlength="1000" placeholder="https://" value="${esc(f.link||'')}"></label>
+   <label class="fl">Note (optional)<input type="text" data-f="note" maxlength="200" value="${esc(f.note||'')}"></label>
    <button type="button" class="btn small danger" data-act="drop-file">Delete this file</button></div>`;
 }
 let droppedLinks=0;
