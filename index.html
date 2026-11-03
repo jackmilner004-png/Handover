@@ -679,7 +679,8 @@ function buildToc(){
   };
   const grp=g=>PAGES.filter(p=>p.group===g).map(row).join('');
   $('#toc').innerHTML='<h2>Front</h2>'+grp('front')+'<h2>Chapters</h2>'+grp('chapter')+'<h2>Back</h2>'+grp('back')+
-    '<div class="legend" aria-label="Status key">'+Object.keys(STATUS).map(k=>`<span><i class="dot d-${k}"></i>${STATUS[k].label}</span>`).join('')+'</div>';
+    '<div class="legend" aria-label="Status key">'+Object.keys(STATUS).map(k=>`<span><i class="dot d-${k}"></i>${STATUS[k].label}</span>`).join('')+'</div>'+
+    '<div class="legend" style="margin-top:14px"><span>Page build: 3 Nov 2026, 14:30</span></div>';
 }
 function shell(p,inner,opts){
   opts=opts||{};
