@@ -482,6 +482,7 @@ const CHAPTERS=[
 ];
 
 
+
 const GLOSSARY=['MRF','E2E','STD','PIR','TC','SB','OL','C&C','PVA','RTV','ASH','IB','OB','SOD','H&S','ECOM','Flow plan','Locks','Roller','Prop model','Stranded labour hours','Master List Lite'];
 const BLANK={status:'active',when:'',slot:'',cadence:[],reviewed:'',tags:[],intro:'',prompts:[],sections:[],files:[],notes:[],contacts:[]};
 const BASE=[].concat(
@@ -680,7 +681,7 @@ function buildToc(){
   const grp=g=>PAGES.filter(p=>p.group===g).map(row).join('');
   $('#toc').innerHTML='<h2>Front</h2>'+grp('front')+'<h2>Chapters</h2>'+grp('chapter')+'<h2>Back</h2>'+grp('back')+
     '<div class="legend" aria-label="Status key">'+Object.keys(STATUS).map(k=>`<span><i class="dot d-${k}"></i>${STATUS[k].label}</span>`).join('')+'</div>'+
-    '<div class="legend" style="margin-top:14px"><span>Page build: 3 Nov 2026, 14:30</span></div>';
+    '<div class="legend" style="margin-top:14px"><span>Page build: 3 Nov 2026, 14:40</span></div>';
 }
 function shell(p,inner,opts){
   opts=opts||{};
@@ -848,18 +849,25 @@ async function publishToGitHub(btn){
   if(btn){btn.disabled=true;btn.textContent='Publishing…'}
   const url='https://api.github.com/repos/'+gh.repo+'/contents/'+gh.path.split('/').map(encodeURIComponent).join('/');
   const hdr={'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+  let outcome='';
   const ok=await run(async()=>{
     let sha,remote={};
-    let r=await fetch(url+'?ref='+encodeURIComponent(gh.branch),{headers:hdr});
+    let r=await fetch(url+'?ref='+encodeURIComponent(gh.branch),{headers:hdr,cache:'no-store'});
     if(r.status===200){const j=await r.json();sha=j.sha;try{const o=JSON.parse(decodeB64(j.content||''));if(o&&typeof o==='object'&&!Array.isArray(o))remote=o}catch(e){remote={}}}
     else if(r.status!==404)throw {status:r.status};
     const merged=Object.assign({},remote,overrides);
+    if(JSON.stringify(merged)===JSON.stringify(remote)){outcome='none';return}
     const body={message:'Update handover content',content:encodeB64(JSON.stringify(merged,null,1)),branch:gh.branch};
     if(sha)body.sha=sha;
     r=await fetch(url,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},hdr),body:JSON.stringify(body)});
     if(!r.ok)throw {status:r.status};
-    published=merged;overrides={};saveLocal();
-  },'Published. GitHub Pages usually shows the change within a minute or two.');
+    let c='';try{const j=await r.json();c=j&&j.commit&&j.commit.sha?j.commit.sha.slice(0,7):''}catch(err){}
+    published=merged;overrides={};saveLocal();outcome='done '+c;
+  });
+  if(ok){
+    if(outcome==='none')say('Nothing was published. This browser has no unpublished edits, or they are already in the repository.',true);
+    else{const c=outcome.slice(5).trim();say('Published'+(c?' as commit '+c:'')+'. GitHub Pages usually shows the change within a minute or two.',false)}
+  }
   computePages();buildToc();buildIndex();show(current,null,true);
 }
 
