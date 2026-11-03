@@ -7,7 +7,7 @@
   --bg:#E7ECE9; --paper:#FBFCFB; --ink:#16211F; --muted:#566663; --rule:#CAD3CF;
   --accent:#0E5C54; --accent-ink:#FFFFFF; --accent-soft:#D6E9E5;
   --draft:#7A4E00; --draft-bg:#F7E9C8; --handed:#464C86; --handed-bg:#E4E5F5; --ref:#4F5B59; --ref-bg:#DFE6E3;
-  --mark:#FFE79A;
+  --danger:#9B2C2C; --mark:#FFE79A;
   --f-display:'Schibsted Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
   --f-body:'Source Serif 4',Georgia,'Times New Roman',serif;
   --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
@@ -17,14 +17,14 @@
     --bg:#0E1514; --paper:#162120; --ink:#E5EEEB; --muted:#93A6A2; --rule:#2B3A38;
     --accent:#62C4B6; --accent-ink:#07211D; --accent-soft:#1B3935;
     --draft:#F0C46A; --draft-bg:#3A2F14; --handed:#B4B8F0; --handed-bg:#272B4A; --ref:#A8B7B4; --ref-bg:#243130;
-    --mark:#6B5A12; color-scheme:dark;
+    --danger:#F19999; --mark:#6B5A12; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#0E1514; --paper:#162120; --ink:#E5EEEB; --muted:#93A6A2; --rule:#2B3A38;
   --accent:#62C4B6; --accent-ink:#07211D; --accent-soft:#1B3935;
   --draft:#F0C46A; --draft-bg:#3A2F14; --handed:#B4B8F0; --handed-bg:#272B4A; --ref:#A8B7B4; --ref-bg:#243130;
-  --mark:#6B5A12; color-scheme:dark;
+  --danger:#F19999; --mark:#6B5A12; color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{scroll-padding-top:96px}
@@ -77,7 +77,11 @@ a{color:var(--accent)}
 /* page */
 main{min-width:0;outline:none}
 .page{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:22px clamp(18px,4vw,44px) 26px;box-shadow:0 14px 30px -26px rgba(0,0,0,.45);max-width:800px}
-.runhead{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:500 11.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.runhead{display:flex;justify-content:space-between;align-items:center;gap:12px;font:500 11.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.rh-right{display:flex;align-items:center;gap:10px;min-width:0;text-align:right}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid var(--rule);border-radius:4px;background:var(--paper);color:var(--ink);cursor:pointer;padding:0;flex:none}
+.iconbtn:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.auto-hint{text-transform:none;letter-spacing:0;font:400 12.5px var(--f-display)}
 .page h1{font:700 clamp(27px,4.4vw,38px)/1.12 var(--f-display);letter-spacing:-.02em;margin:26px 0 14px;text-wrap:balance}
 .chip{font:500 11px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:3px;display:inline-block;white-space:nowrap}
 .s-active{background:var(--accent-soft);color:var(--accent)}
@@ -117,8 +121,6 @@ main{min-width:0;outline:none}
 .todo h3{font:600 16.5px var(--f-display);margin:0 0 4px}
 .todo p{margin:0;color:var(--muted);font-size:15.5px}
 .todo ul{margin-top:8px}
-.todogrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:14px}
-.todogrid .todo{margin-top:0}
 .tablewrap{overflow-x:auto;margin-top:12px}
 table{border-collapse:collapse;width:100%;font:400 15px/1.4 var(--f-display)}
 th{font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--rule);white-space:nowrap}
@@ -140,6 +142,45 @@ td .add{color:var(--draft);font:400 12px var(--f-mono)}
 .flash{animation:flash 1.8s ease-out}
 @keyframes flash{from{background:var(--accent-soft)}to{background:transparent}}
 @media (prefers-reduced-motion:reduce){.flash{animation:none}}
+
+/* forms and buttons */
+.field{display:grid;gap:6px;margin-top:16px;min-width:0}
+.field label,.field legend{font:600 13.5px var(--f-display)}
+.field .hint{font:400 13px/1.4 var(--f-display);color:var(--muted)}
+.field input[type=text],.field select,.field textarea,.inline input[type=text],.inline select{width:100%;font:400 16px/1.45 var(--f-display);color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:9px 11px;min-width:0}
+.field textarea{font:400 14.5px/1.5 var(--f-mono);resize:vertical;min-height:90px}
+.field textarea.tall{min-height:260px}
+.fieldrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 18px}
+fieldset.field{border:0;padding:0;margin:16px 0 0}
+.cad{display:flex;flex-wrap:wrap;gap:8px 14px}
+.cad label{font:400 14.5px var(--f-display);display:flex;gap:7px;align-items:center}
+.cad input{width:17px;height:17px;accent-color:var(--accent)}
+.guide{margin-top:8px;font:400 13.5px var(--f-display);color:var(--muted)}
+.guide summary{cursor:pointer;color:var(--accent);font-weight:500}
+.guide pre{margin:8px 0 0;padding:10px 12px;background:var(--bg);border:1px solid var(--rule);border-radius:4px;overflow-x:auto;font:400 13px/1.55 var(--f-mono);color:var(--ink)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;padding-top:18px;border-top:1px solid var(--rule)}
+.btn{font:600 14.5px var(--f-display);color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:9px 14px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{color:var(--accent-ink);filter:brightness(1.08)}
+.btn.small{font-size:13px;padding:5px 9px}
+.btn.danger{color:var(--danger)}
+.btn.danger:hover{border-color:var(--danger);color:var(--danger)}
+.btn[disabled]{opacity:.4;cursor:default}
+.btn[disabled]:hover{border-color:var(--rule);color:var(--ink)}
+.inline{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.2fr) auto;gap:10px;align-items:end;margin-top:12px}
+@media (max-width:640px){.inline{grid-template-columns:minmax(0,1fr)}}
+.inline label{display:block;font:600 13.5px var(--f-display);margin-bottom:6px}
+.notice{margin:0 0 6px;padding:10px 12px;border-radius:4px;background:var(--accent-soft);font:500 14.5px/1.4 var(--f-display)}
+.notice.warn{background:var(--draft-bg);color:var(--draft)}
+.pl{list-style:none;padding:0 !important;gap:0 !important;margin-top:8px !important}
+.pl li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:6px 10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--rule);font:500 15px/1.3 var(--f-display)}
+.pl .n{font:400 12px var(--f-mono);color:var(--muted)}
+.pl a{color:var(--ink);text-decoration:none;min-width:0;overflow-wrap:anywhere}
+.pl a:hover{color:var(--accent)}
+.pl .btns{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.pl h3{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:18px 0 0}
+.backup textarea{font:400 12.5px/1.45 var(--f-mono);min-height:120px}
 
 /* search results */
 .results{max-width:800px}
@@ -171,11 +212,9 @@ mark{background:var(--mark);color:var(--ink);border-radius:2px;padding:0 1px}
 'use strict';
 
 /* ==========================================================================
-   EDIT HERE. Everything on the page is built from this list.
-   status: active | handed | reference | draft
+   STARTING CONTENT. Edits made with the pencil icon are stored separately and
+   sit on top of this. status: active | handed | reference | draft
    cadence keys: mon tue wed thu fri month req tbc
-   files: link is empty until you add the SharePoint address.
-   reviewed: type a date such as '03 Nov 2026' once the chapter has been checked.
    ========================================================================== */
 const CHAPTERS=[
 {id:'power-bi',title:'Power BI Projection Update',status:'draft',when:'To confirm',slot:'',cadence:['tbc'],reviewed:'',
@@ -338,15 +377,42 @@ const CHAPTERS=[
  sections:[],files:[],notes:[],contacts:[]}
 ];
 
-const FRONT=[{id:'start',title:'Start here'},{id:'rhythm',title:'Weekly rhythm'},{id:'people',title:'Who’s who'}];
-const BACK=[{id:'files',title:'Files and links'},{id:'troubleshooting',title:'If something goes wrong'},{id:'glossary',title:'Glossary'},{id:'faq',title:'Questions and answers'}];
-const GLOSSARY=['MRF','E2E','STD','PIR','TC','SB','OL','C&C','PVA','RTV','ASH','IB','OB','SOD','H&S','ECOM','Flow plan','Locks','Roller','Prop model','Stranded labour hours','Master List Lite'];
 
-/* ===== end of editable content ===== */
+const GLOSSARY=['MRF','E2E','STD','PIR','TC','SB','OL','C&C','PVA','RTV','ASH','IB','OB','SOD','H&S','ECOM','Flow plan','Locks','Roller','Prop model','Stranded labour hours','Master List Lite'];
+const BLANK={status:'active',when:'',slot:'',cadence:[],reviewed:'',tags:[],intro:'',prompts:[],sections:[],files:[],notes:[],contacts:[]};
+const BASE=[].concat(
+ [{id:'start',group:'front',order:10,title:'Start here',extra:'progress',
+   intro:'Everything needed to keep the weekly and monthly reporting running, in one place. Use the contents on the left, or search for a task, a file or a person.',
+   sections:[
+    {h:'Purpose and scope',kind:'bullets',note:'Why this book exists and what it covers.',items:[]},
+    {h:'Leaving date and cover',kind:'bullets',note:'Last working day, and who covers until the handover is complete.',items:[]},
+    {h:'Who to contact first',kind:'bullets',note:'The one person to ask when something here is unclear.',items:[]},
+    {h:'What goes wrong most often',kind:'bullets',note:'The two or three problems the team is most likely to hit.',items:[]}]},
+  {id:'rhythm',group:'front',order:20,title:'Weekly rhythm',auto:'rhythm'},
+  {id:'people',group:'front',order:30,title:'Who’s who',auto:'people'}],
+ CHAPTERS.map((c,i)=>Object.assign({group:'chapter',order:100+i*10},c)),
+ [{id:'files',group:'back',order:900,title:'Files and links',auto:'files'},
+  {id:'troubleshooting',group:'back',order:910,title:'If something goes wrong',
+   intro:'Short fixes for the problems the team is most likely to hit. Each entry says what you see, what to check and who to ask.',
+   sections:[1,2,3].map(n=>({h:'Problem '+n,kind:'bullets',note:'What you see, what to check, who to ask.',items:[]}))},
+  {id:'glossary',group:'back',order:920,title:'Glossary',
+   intro:'Terms that appear in the chapters. Add a plain definition for anyone new to the work.',
+   sections:[{h:'',kind:'terms',items:GLOSSARY.map(t=>t+' | ')}]},
+  {id:'faq',group:'back',order:930,title:'Questions and answers',
+   intro:'Questions the team has asked over time, with short answers and a link to the chapter.',
+   sections:[1,2].map(n=>({h:'Question '+n,kind:'bullets',note:'Answer in one or two sentences, with a link to the chapter.',items:[]}))},
+  {id:'functions',group:'back',order:990,title:'Functions',auto:'functions'}]
+).map(b=>Object.assign({},BLANK,b));
+const BASE_IDS={};BASE.forEach(b=>{BASE_IDS[b.id]=1});
+
+/* ===== end of starting content ===== */
 
 const STATUS={active:{label:'Active',cls:'s-active'},handed:{label:'Handed over',cls:'s-handed'},reference:{label:'Reference only',cls:'s-ref'},draft:{label:'To write',cls:'s-draft'}};
 const COLS=[['mon','Monday'],['tue','Tuesday'],['wed','Wednesday'],['thu','Thursday'],['fri','Friday'],['month','Monthly'],['req','On request'],['tbc','Day to confirm']];
-const TYPE={xlsx:'XLSX',pptx:'PPTX',folder:'Folder',docx:'DOCX',pdf:'PDF'};
+const TYPE={xlsx:'XLSX',pptx:'PPTX',folder:'Folder',docx:'DOCX',pdf:'PDF',file:'File'};
+const KINDS=['checks','steps','bullets','terms'];
+const GROUP_RANK={front:0,chapter:1,back:2};
+const GROUP_LABEL={front:'Front matter',chapter:'Chapter',back:'Back matter'};
 const SYN={late:['deadline','due','before 9am','missed'],deadline:['late','due','before 9am'],report:['pack','slide','summary'],pack:['report','slide','review'],
  slide:['deck','pptx','presentation','pack'],deck:['slide','pptx','presentation'],presentation:['slide','pptx','deck'],
  hour:['labour','overtime','flex'],labour:['hours','overtime','flex'],overtime:['hours','labour','ash'],budget:['finance','overspend'],money:['finance','budget'],
@@ -363,155 +429,345 @@ const $=(s,r)=>(r||document).querySelector(s);
 const $$=(s,r)=>Array.from((r||document).querySelectorAll(s));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const stem=t=>t.length>3&&t.endsWith('s')?t.slice(0,-1):t;
+const clone=o=>JSON.parse(JSON.stringify(o));
 
+/* ---------- where edits live ---------- */
+let overrides={};          // page id -> {page?, order?, deleted?}
+let db=null;
+const store={mode:'pending',slow:false,note:''};
 let ticks={};
 try{ticks=JSON.parse(localStorage.getItem('rh-ticks')||'{}')||{}}catch(e){ticks={}}
 const saveTicks=()=>{try{localStorage.setItem('rh-ticks',JSON.stringify(ticks))}catch(e){}};
+function loadLocal(){try{const o=JSON.parse(localStorage.getItem('rh-pages')||'{}');overrides=o&&typeof o==='object'?o:{}}catch(e){overrides={}}}
+function saveLocal(){try{localStorage.setItem('rh-pages',JSON.stringify(overrides));return true}catch(e){return false}}
 
-const PAGES=[].concat(FRONT.map(p=>({id:p.id,title:p.title,kind:'front'})),
-  CHAPTERS.map(c=>({id:c.id,title:c.title,kind:'chapter',ch:c})),
-  BACK.map(p=>({id:p.id,title:p.title,kind:'back'})));
+/* ---------- tidy any page object ---------- */
+const safeLink=l=>/^https?:\/\//i.test(String(l||'').trim())?String(l).trim().slice(0,1000):'';
+function normPage(p,id,group){
+  const S=v=>typeof v==='string'?v.slice(0,6000):'';
+  const A=v=>Array.isArray(v)?v:[];
+  p=p&&typeof p==='object'?p:{};
+  const o={id:id,group:group,title:S(p.title).trim()||'Untitled page',status:STATUS[p.status]?p.status:'active',
+    when:S(p.when),slot:S(p.slot),reviewed:S(p.reviewed),intro:S(p.intro)};
+  o.cadence=A(p.cadence).filter(k=>COLS.some(c=>c[0]===k));
+  if(group==='chapter'&&!o.cadence.length)o.cadence=['tbc'];
+  o.tags=A(p.tags).map(S).map(t=>t.trim()).filter(Boolean).slice(0,40);
+  o.prompts=A(p.prompts).map(S).filter(Boolean).slice(0,10);
+  o.sections=A(p.sections).slice(0,60).map(s=>{s=s||{};return {h:S(s.h),kind:KINDS.indexOf(s.kind)>=0?s.kind:'bullets',note:S(s.note),
+    items:A(s.items).slice(0,300).map(it=>{if(typeof it==='string')return S(it);const sub=A(it&&it.sub).map(S);return sub.length?{t:S(it&&it.t),sub:sub}:S(it&&it.t)})}});
+  o.files=A(p.files).map(f=>{f=f||{};return {name:S(f.name).trim(),type:TYPE[f.type]?f.type:'file',note:S(f.note),link:safeLink(f.link)}}).filter(f=>f.name);
+  o.notes=A(p.notes).map(S).map(t=>t.trim()).filter(Boolean);
+  o.contacts=A(p.contacts).map(x=>({name:S(x&&x.name).trim(),why:S(x&&x.why).trim()})).filter(x=>x.name);
+  return o;
+}
+
+/* ---------- pages = starting content + edits ---------- */
+let PAGES=[];
+function computePages(){
+  const list=[];
+  BASE.forEach(b=>{
+    const o=overrides[b.id]||{};if(o.deleted)return;
+    let src=b;
+    if(o.page){src=normPage(Object.assign({},b,o.page),b.id,b.group);if(b.auto)src.auto=b.auto;if(b.extra)src.extra=b.extra}
+    list.push(Object.assign({},src,{order:typeof o.order==='number'?o.order:b.order}));
+  });
+  Object.keys(overrides).forEach(id=>{
+    if(BASE_IDS[id])return;const o=overrides[id];if(!o||o.deleted||!o.page)return;
+    const g=GROUP_RANK[o.page.group]!=null?o.page.group:'chapter';
+    list.push(Object.assign(normPage(o.page,id,g),{order:typeof o.order==='number'?o.order:9999}));
+  });
+  list.sort((a,b)=>GROUP_RANK[a.group]-GROUP_RANK[b.group]||a.order-b.order);
+  PAGES=list;
+}
 const byId=id=>PAGES.find(p=>p.id===id);
-const chip=st=>`<span class="chip ${STATUS[st].cls}">${STATUS[st].label}</span>`;
+const chapters=()=>PAGES.filter(p=>p.group==='chapter');
+const chNum=p=>chapters().indexOf(p)+1;
+const label=p=>p.group==='chapter'?'Chapter '+chNum(p):GROUP_LABEL[p.group];
+
+async function setOverride(id,patch){
+  await storeReady;
+  const next=Object.assign({},overrides[id]||{});
+  Object.keys(patch).forEach(k=>{if(patch[k]===undefined||patch[k]===null)delete next[k];else next[k]=patch[k]});
+  if(next.deleted===false)delete next.deleted;
+  const empty=!('page' in next)&&!('order' in next)&&!next.deleted;
+  if(store.mode==='shared'){
+    const ref=db.collection('pages').doc(id);
+    if(empty)await ref.delete();else await ref.set(clone(next));
+  }
+  if(empty)delete overrides[id];else overrides[id]=next;
+  if(store.mode!=='shared'&&!saveLocal())throw {code:'storage'};
+}
+
+/* ---------- text <-> sections ---------- */
+function bodyToText(sections){
+  return sections.map(s=>{
+    let t='## '+s.h;
+    if(s.note)t+='\n'+s.note;
+    s.items.forEach((it,i)=>{
+      const text=typeof it==='string'?it:it.t;
+      const pre=s.kind==='checks'?'[ ] ':s.kind==='steps'?(i+1)+'. ':s.kind==='terms'?'= ':'- ';
+      t+='\n'+pre+text;
+      (typeof it==='string'?[]:(it.sub||[])).forEach(x=>{t+='\n  - '+x});
+    });
+    return t;
+  }).join('\n\n');
+}
+function textToBody(txt){
+  const secs=[];let cur=null;
+  const start=h=>{cur={h:h,kind:null,note:'',items:[]};secs.push(cur)};
+  String(txt).split('\n').forEach(raw=>{
+    const line=raw.replace(/\s+$/,'');if(!line.trim())return;
+    let m=line.match(/^##\s*(.*)$/);
+    if(m){start(m[1].trim());return}
+    if(!cur)start('');
+    m=line.match(/^(?:\s{2,}|\t)[-*]\s+(.*)$/);
+    if(m&&cur.items.length){
+      const last=cur.items[cur.items.length-1];
+      if(typeof last==='string')cur.items[cur.items.length-1]={t:last,sub:[m[1].trim()]};else last.sub.push(m[1].trim());
+      return;
+    }
+    const t=line.trim();let kind=null,text=t;
+    if(m=t.match(/^\[[ xX]?\]\s*(.*)$/)){kind='checks';text=m[1]}
+    else if(m=t.match(/^\d+[.)]\s+(.*)$/)){kind='steps';text=m[1]}
+    else if(m=t.match(/^=\s*(.*)$/)){kind='terms';text=m[1]}
+    else if(m=t.match(/^[-*•]\s+(.*)$/)){kind='bullets';text=m[1]}
+    if(kind===null){
+      if(!cur.items.length){cur.note=(cur.note?cur.note+' ':'')+t;return}
+      kind=cur.kind||'bullets';
+    }
+    if(!cur.kind)cur.kind=kind;
+    else if(kind!==cur.kind){start('');cur.kind=kind}
+    cur.items.push(text);
+  });
+  secs.forEach(s=>{if(!s.kind)s.kind='bullets'});
+  return secs;
+}
+function filesToText(files){return files.map(f=>{const a=[f.type,f.name,f.note,f.link];while(a.length>2&&!a[a.length-1])a.pop();return a.join(' | ')}).join('\n')}
+function textToFiles(txt){
+  return String(txt).split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
+    const p=l.split('|').map(x=>x.trim());let type;
+    if(p.length>=2&&TYPE[p[0].toLowerCase()]){type=p.shift().toLowerCase()}
+    else{const ext=(p[0].match(/\.(xlsx|pptx|docx|pdf)$/i)||[])[1];type=ext?ext.toLowerCase():(/\.[a-z0-9]{2,4}$/i.test(p[0])?'file':'folder')}
+    return {name:p[0]||'',type:type,note:p[1]||'',link:p[2]||''};
+  }).filter(f=>f.name);
+}
+const contactsToText=c=>c.map(x=>x.name+(x.why?' | '+x.why:'')).join('\n');
+const textToContacts=t=>String(t).split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const i=l.indexOf('|');return i<0?{name:l,why:''}:{name:l.slice(0,i).trim(),why:l.slice(i+1).trim()}});
+
+/* ---------- small renderers ---------- */
 const itemText=it=>typeof it==='string'?it:it.t+' '+(it.sub||[]).join(' ');
 const li=it=>typeof it==='string'?esc(it):esc(it.t)+(it.sub?'<ul>'+it.sub.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ul>':'');
+const chip=st=>`<span class="chip ${STATUS[st].cls}">${STATUS[st].label}</span>`;
+const ICON='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+let notice='',noticeWarn=false;
+const noticeHtml=()=>notice?`<p class="notice${noticeWarn?' warn':''}" role="status">${esc(notice)}</p>`:'';
+function say(t,warn){notice=t;noticeWarn=!!warn}
 
-/* ---------- contents ---------- */
 function buildToc(){
   const row=p=>{
-    let n='',dot='';
-    if(p.kind==='chapter'){n=String(CHAPTERS.indexOf(p.ch)+1);dot=`<span class="dot d-${p.ch.status}" title="${STATUS[p.ch.status].label}"></span>`}
-    return `<a href="#${p.id}" data-id="${p.id}"><span class="n">${n}</span><span>${esc(p.title)}</span>${dot||'<span></span>'}</a>`;
+    const n=p.group==='chapter'?String(chNum(p)):'';
+    const dot=p.group==='chapter'?`<span class="dot d-${p.status}" title="${STATUS[p.status].label}"></span>`:'<span></span>';
+    return `<a href="#${p.id}" data-id="${p.id}"><span class="n">${n}</span><span>${esc(p.title)}</span>${dot}</a>`;
   };
-  $('#toc').innerHTML='<h2>Front</h2>'+PAGES.filter(p=>p.kind==='front').map(row).join('')+
-    '<h2>Chapters</h2>'+PAGES.filter(p=>p.kind==='chapter').map(row).join('')+
-    '<h2>Back</h2>'+PAGES.filter(p=>p.kind==='back').map(row).join('')+
+  const grp=g=>PAGES.filter(p=>p.group===g).map(row).join('');
+  $('#toc').innerHTML='<h2>Front</h2>'+grp('front')+'<h2>Chapters</h2>'+grp('chapter')+'<h2>Back</h2>'+grp('back')+
     '<div class="legend" aria-label="Status key">'+Object.keys(STATUS).map(k=>`<span><i class="dot d-${k}"></i>${STATUS[k].label}</span>`).join('')+'</div>';
 }
-
-/* ---------- page pieces ---------- */
-function shell(run,inner,id,folio){
-  const i=PAGES.findIndex(p=>p.id===id),prev=PAGES[i-1],next=PAGES[i+1];
-  const pager='<nav class="pager" aria-label="Previous and next page">'+
+function shell(p,inner,opts){
+  opts=opts||{};
+  const i=PAGES.indexOf(p),prev=PAGES[i-1],next=PAGES[i+1];
+  const total=chapters().length;
+  const run=p.group==='chapter'?'Chapter '+chNum(p)+' of '+total:GROUP_LABEL[p.group];
+  let right;
+  if(opts.editing)right='<span>Editing</span>';
+  else if(p.auto==='functions')right='<span>'+esc(run)+'</span>';
+  else if(p.auto)right='<span>'+esc(run)+'</span><span class="auto-hint">Built from the chapters</span>';
+  else right='<span>'+esc(run)+'</span><button type="button" class="iconbtn" data-act="edit" aria-label="Edit this page" title="Edit this page">'+ICON+'</button>';
+  const pager=opts.editing?'':'<nav class="pager" aria-label="Previous and next page">'+
     (prev?`<a class="prev" href="#${prev.id}"><small>Previous</small>${esc(prev.title)}</a>`:'<span></span>')+
     (next?`<a class="next" href="#${next.id}"><small>Next</small>${esc(next.title)}</a>`:'')+'</nav>';
-  return `<article class="page"><div class="runhead"><span>Reporting handover</span><span>${esc(run)}</span></div>${inner}${pager}${folio?`<div class="folio">${folio}</div>`:''}</article>`;
+  const folio=p.group==='chapter'&&!opts.editing?`<div class="folio">${chNum(p)}</div>`:'';
+  return `<article class="page"><div class="runhead"><span>Reporting handover</span><span class="rh-right">${right}</span></div>${inner}${pager}${folio}</article>`;
 }
-function todo(title,text,list){
-  return `<div class="todo"><span class="chip s-draft">To add</span><h3>${esc(title)}</h3>${text?`<p>${esc(text)}</p>`:''}${list?'<ul>'+list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':''}</div>`;
+function todoBox(title,text,list,tag){
+  return `<div class="todo"><span class="chip s-draft">${tag||'To add'}</span><h3>${esc(title)}</h3>${text?`<p>${esc(text)}</p>`:''}${list&&list.length?'<ul>'+list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':''}</div>`;
 }
-function section(c,s,si){
-  const key=c.id+'-'+si;let body;
+function section(p,s,si){
+  const key=p.id+'-'+si;
+  if(!s.items.length)return `<section class="sec" id="sec-${si}">${todoBox(s.h||'Section',s.note||'')}</section>`;
+  let body;
   if(s.kind==='checks'){
     body='<ul class="checks">'+s.items.map((it,i)=>{const k=key+'-'+i;
       return `<li><label><input type="checkbox" data-tick="${k}"${ticks[k]?' checked':''}><span>${li(it)}</span></label></li>`}).join('')+'</ul>';
   }else if(s.kind==='steps'){
     body='<ol class="steps">'+s.items.map(it=>`<li>${li(it)}</li>`).join('')+'</ol>';
+  }else if(s.kind==='terms'){
+    body='<div class="tablewrap"><table><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody>'+s.items.map(it=>{
+      const t=itemText(it),i=t.indexOf('|'),term=i<0?t:t.slice(0,i).trim(),mean=i<0?'':t.slice(i+1).trim();
+      return `<tr><td><b>${esc(term)}</b></td><td>${mean?esc(mean):'<span class="add">definition to add</span>'}</td></tr>`}).join('')+'</tbody></table></div>';
   }else{
     body='<ul class="list">'+s.items.map(it=>`<li>${li(it)}</li>`).join('')+'</ul>';
   }
-  return `<section class="sec" id="sec-${si}"><h2>${esc(s.h)}</h2>${s.note?`<p class="secnote">${esc(s.note)}</p>`:''}${body}</section>`;
+  return `<section class="sec" id="sec-${si}">${s.h?`<h2>${esc(s.h)}</h2>`:''}${s.note?`<p class="secnote">${esc(s.note)}</p>`:''}${body}</section>`;
 }
 function fileList(files){
   return '<ul class="files">'+files.map(f=>{
-    const nm=`<span class="nm">${esc(f.name)}${f.note?`<small>${esc(f.note)}</small>`:''}</span>`;
+    const sm=f.note?`<small>${esc(f.note)}</small>`:'';
     const t=`<span class="ft">${esc(TYPE[f.type]||f.type)}</span>`;
-    return f.link?`<li>${t}<a class="nm" href="${esc(f.link)}" target="_blank" rel="noopener">${esc(f.name)}${f.note?`<small>${esc(f.note)}</small>`:''}</a></li>`
-                 :`<li>${t}${nm}<span class="nolink">link to add</span></li>`}).join('')+'</ul>';
+    return f.link?`<li>${t}<a class="nm" href="${esc(f.link)}" target="_blank" rel="noopener">${esc(f.name)}${sm}</a></li>`
+                 :`<li>${t}<span class="nm">${esc(f.name)}${sm}</span><span class="nolink">link to add</span></li>`}).join('')+'</ul>';
 }
 
 /* ---------- page renderers ---------- */
-function chapterPage(c){
-  const n=CHAPTERS.indexOf(c)+1;
-  const contacts=(c.contacts||[]).map(x=>`${esc(x.name)}<small>${esc(x.why)}</small>`).join('<br>')||'<small>None listed</small>';
-  let h=`<h1>${esc(c.title)}</h1>
-   <dl class="meta"><div><dt>When</dt><dd>${esc(c.when)}</dd></div><div><dt>Status</dt><dd>${chip(c.status)}</dd></div>
-   <div><dt>Last reviewed</dt><dd>${c.reviewed?esc(c.reviewed):'<small>Not set</small>'}</dd></div>
-   <div><dt>Contacts</dt><dd>${contacts}</dd></div></dl>`;
-  if(c.intro)h+=`<p class="intro">${esc(c.intro)}</p>`;
-  if(c.status==='draft')h+=todo('This chapter is not written yet','Suggested headings to cover:',c.prompts);
-  (c.sections||[]).forEach((s,i)=>{h+=section(c,s,i)});
-  if((c.sections||[]).some(s=>s.kind==='checks'))h+='<div class="tickbar"><span>Ticks are saved on this device only.</span><button type="button" class="linkbtn" data-clear="'+c.id+'">Clear ticks</button></div>';
-  if(c.notes&&c.notes.length)h+=c.notes.map(t=>`<div class="callout"><b>Note</b>${esc(t)}</div>`).join('');
-  if(c.files&&c.files.length)h+=`<div class="block"><h2>Files used</h2>${fileList(c.files)}</div>`;
-  return shell('Chapter '+n+' of '+CHAPTERS.length,h,c.id,String(n));
+function contentPage(p){
+  const isCh=p.group==='chapter';
+  let h=`<h1>${esc(p.title)}</h1>`+noticeHtml();
+  if(isCh){
+    const contacts=p.contacts.map(x=>`${esc(x.name)}${x.why?`<small>${esc(x.why)}</small>`:''}`).join('<br>')||'<small>None listed</small>';
+    h+=`<dl class="meta"><div><dt>When</dt><dd>${p.when?esc(p.when):'<small>Not set</small>'}</dd></div><div><dt>Status</dt><dd>${chip(p.status)}</dd></div>
+     <div><dt>Last reviewed</dt><dd>${p.reviewed?esc(p.reviewed):'<small>Not set</small>'}</dd></div>
+     <div><dt>Contacts</dt><dd>${contacts}</dd></div></dl>`;
+  }
+  if(p.intro)h+=`<p class="intro">${esc(p.intro)}</p>`;
+  if(isCh&&p.status==='draft'&&!p.sections.length)h+=todoBox('This chapter is not written yet','Suggested headings to cover:',p.prompts,'To write');
+  p.sections.forEach((s,i)=>{h+=section(p,s,i)});
+  if(p.sections.some(s=>s.kind==='checks'&&s.items.length))h+=`<div class="tickbar"><span>Ticks are saved on this device only.</span><button type="button" class="linkbtn" data-clear="${esc(p.id)}">Clear ticks</button></div>`;
+  p.notes.forEach(t=>{h+=`<div class="callout"><b>Note</b>${esc(t)}</div>`});
+  if(p.files.length)h+=`<div class="block"><h2>Files used</h2>${fileList(p.files)}</div>`;
+  if(p.extra==='progress')h+=progressBlock();
+  const empty=!p.intro&&!p.sections.length&&!p.notes.length&&!p.files.length&&!(isCh&&p.status==='draft');
+  if(empty)h+=todoBox('This page is empty','Use the pencil icon at the top of the page to add content.');
+  return shell(p,h);
 }
-function startPage(){
-  const files=[].concat.apply([],CHAPTERS.map(c=>c.files||[]));
-  const written=CHAPTERS.filter(c=>c.status!=='draft');
-  const linked=files.filter(f=>f.link).length,reviewed=written.filter(c=>c.reviewed).length;
-  const drafts=CHAPTERS.filter(c=>c.status==='draft');
-  const h=`<h1>Start here</h1>
-   <p class="intro">Everything needed to keep the weekly and monthly reporting running, in one place. Use the contents on the left, or search for a task, a file or a person.</p>
-   <div class="todogrid">
-    ${todo('Purpose and scope','Why this book exists and what it covers.')}
-    ${todo('Leaving date and cover','Last working day, and who covers until the handover is complete.')}
-    ${todo('Who to contact first','The one person to ask when something here is unclear.')}
-    ${todo('What goes wrong most often','The two or three problems the team is most likely to hit.')}
-   </div>
-   <div class="block"><h2>Handover progress</h2>
-    <div class="tablewrap"><table><thead><tr><th>Item</th><th>Done</th></tr></thead><tbody>
-     <tr><td>Chapters written</td><td>${written.length} of ${CHAPTERS.length}</td></tr>
-     <tr><td>Files with a link</td><td>${linked} of ${files.length}</td></tr>
-     <tr><td>Chapters with a review date</td><td>${reviewed} of ${written.length}</td></tr>
-    </tbody></table></div>
-    ${drafts.length?'<p class="secnote" style="margin-top:12px">Still to write: '+drafts.map(d=>`<a href="#${d.id}">${esc(d.title)}</a>`).join(', ')+'.</p>':''}
-   </div>`;
-  return shell('Front matter',h,'start','');
+function progressBlock(){
+  const chs=chapters(),files=[].concat.apply([],chs.map(c=>c.files));
+  const written=chs.filter(c=>c.status!=='draft'),linked=files.filter(f=>f.link).length,reviewed=written.filter(c=>c.reviewed).length;
+  const drafts=chs.filter(c=>c.status==='draft');
+  return `<div class="block"><h2>Handover progress</h2><div class="tablewrap"><table><thead><tr><th>Item</th><th>Done</th></tr></thead><tbody>
+   <tr><td>Chapters written</td><td>${written.length} of ${chs.length}</td></tr>
+   <tr><td>Files with a link</td><td>${linked} of ${files.length}</td></tr>
+   <tr><td>Chapters with a review date</td><td>${reviewed} of ${written.length}</td></tr></tbody></table></div>
+   ${drafts.length?'<p class="secnote" style="margin-top:12px">Still to write: '+drafts.map(d=>`<a href="#${d.id}">${esc(d.title)}</a>`).join(', ')+'.</p>':''}</div>`;
 }
-function rhythmPage(){
-  const cols=COLS.map(([k,label])=>{
-    const list=CHAPTERS.filter(c=>c.cadence.includes(k));
-    let body;
-    if(!list.length)body=k==='wed'||k==='thu'?'<p class="none">Nothing logged yet</p>':'<p class="none">Nothing</p>';
-    else body=list.map(c=>`<a class="ri" href="#${c.id}">${esc(c.title)}${c.slot?`<small>${esc(c.slot)}</small>`:''}${c.status!=='active'?chip(c.status):''}</a>`).join('');
-    return `<div><h2>${label}</h2>${body}</div>`;
+function rhythmPage(p){
+  const chs=chapters();
+  const cols=COLS.map(([k,name])=>{
+    const list=chs.filter(c=>c.cadence.includes(k));
+    const body=list.length?list.map(c=>`<a class="ri" href="#${c.id}">${esc(c.title)}${c.slot?`<small>${esc(c.slot)}</small>`:''}${c.status!=='active'?chip(c.status):''}</a>`).join('')
+      :`<p class="none">${k==='wed'||k==='thu'?'Nothing logged yet':'Nothing'}</p>`;
+    return `<div><h2>${name}</h2>${body}</div>`;
   }).join('');
-  const h=`<h1>Weekly rhythm</h1><p class="intro">What lands when. Each item opens its chapter. Items under “Day to confirm” have no day in the notes yet.</p><div class="rhythm">${cols}</div>`;
-  return shell('Front matter',h,'rhythm','');
+  return shell(p,`<h1>${esc(p.title)}</h1><p class="intro">What lands when. Each item opens its chapter. Items under “Day to confirm” have no day in the notes yet.</p><div class="rhythm">${cols}</div>`);
 }
-function peoplePage(){
-  const map={};
-  CHAPTERS.forEach(c=>(c.contacts||[]).forEach(x=>{(map[x.name]=map[x.name]||[]).push({why:x.why,c})}));
-  const rows=Object.keys(map).map(name=>`<tr><td><b>${esc(name)}</b></td><td>${map[name].map(m=>esc(m.why)).join('<br>')}</td>
-    <td>${map[name].map(m=>`<a href="#${m.c.id}">${esc(m.c.title)}</a>`).join('<br>')}</td><td><span class="add">add Teams or email</span></td></tr>`).join('');
-  const h=`<h1>Who’s who</h1><p class="intro">People named in the chapters. Add how to reach each one.</p>
-   <div class="tablewrap"><table><thead><tr><th>Name</th><th>Why they matter</th><th>Chapter</th><th>Contact</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-  return shell('Front matter',h,'people','');
+function peoplePage(p){
+  const map={},order=[];
+  PAGES.forEach(c=>c.contacts.forEach(x=>{if(!map[x.name]){map[x.name]=[];order.push(x.name)}map[x.name].push({why:x.why,c:c})}));
+  const rows=order.map(n=>`<tr><td><b>${esc(n)}</b></td><td>${map[n].map(m=>esc(m.why)).filter(Boolean).join('<br>')}</td>
+    <td>${map[n].map(m=>`<a href="#${m.c.id}">${esc(m.c.title)}</a>`).join('<br>')}</td></tr>`).join('');
+  return shell(p,`<h1>${esc(p.title)}</h1><p class="intro">People named in the chapters. Add or change them in the Contacts box when editing a chapter.</p>
+   <div class="tablewrap"><table><thead><tr><th>Name</th><th>Why they matter</th><th>Chapter</th></tr></thead><tbody>${rows||'<tr><td colspan="3"><span class="add">No contacts listed yet</span></td></tr>'}</tbody></table></div>`);
 }
-function filesPage(){
+function filesPage(p){
   const rows=[];
-  CHAPTERS.forEach(c=>(c.files||[]).forEach(f=>rows.push(`<tr><td><span class="ft">${esc(TYPE[f.type]||f.type)}</span></td><td>${f.link?`<a href="${esc(f.link)}" target="_blank" rel="noopener">${esc(f.name)}</a>`:esc(f.name)}${f.note?`<br><small style="color:var(--muted)">${esc(f.note)}</small>`:''}</td>
+  PAGES.forEach(c=>c.files.forEach(f=>rows.push(`<tr><td><span class="ft">${esc(TYPE[f.type]||f.type)}</span></td><td>${f.link?`<a href="${esc(f.link)}" target="_blank" rel="noopener">${esc(f.name)}</a>`:esc(f.name)}${f.note?`<br><small style="color:var(--muted)">${esc(f.note)}</small>`:''}</td>
     <td><a href="#${c.id}">${esc(c.title)}</a></td><td>${f.link?'Linked':'<span class="add">link to add</span>'}</td></tr>`)));
-  const h=`<h1>Files and links</h1><p class="intro">Every file named in the chapters, collected in one list.</p>
-   <div class="tablewrap"><table><thead><tr><th>Type</th><th>File</th><th>Used in</th><th>Link</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
-  return shell('Back matter',h,'files','');
+  return shell(p,`<h1>${esc(p.title)}</h1><p class="intro">Every file named in the chapters, collected in one list. Add links in the Files box when editing a page.</p>
+   <div class="tablewrap"><table><thead><tr><th>Type</th><th>File</th><th>Used in</th><th>Link</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`);
 }
-function troublePage(){
-  const h=`<h1>If something goes wrong</h1><p class="intro">Short fixes for the problems the team is most likely to hit. Each entry says what you see, what to check and who to ask.</p>
-   ${todo('Problem 1','What you see, what to check, who to ask.')}${todo('Problem 2','What you see, what to check, who to ask.')}${todo('Problem 3','What you see, what to check, who to ask.')}`;
-  return shell('Back matter',h,'troubleshooting','');
-}
-function glossaryPage(){
-  const rows=GLOSSARY.map(t=>`<tr><td><b>${esc(t)}</b></td><td><span class="add">definition to add</span></td></tr>`).join('');
-  const h=`<h1>Glossary</h1><p class="intro">Terms that appear in the chapters. Add a plain definition for anyone new to the work.</p>
-   <div class="tablewrap"><table><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-  return shell('Back matter',h,'glossary','');
-}
-function faqPage(){
-  const h=`<h1>Questions and answers</h1><p class="intro">Questions the team has asked over time, with short answers and a link to the chapter.</p>
-   ${todo('Question 1','Answer in one or two sentences, with a link to the chapter.')}${todo('Question 2','Answer in one or two sentences, with a link to the chapter.')}`;
-  return shell('Back matter',h,'faq','');
-}
-const RENDER={start:startPage,rhythm:rhythmPage,people:peoplePage,files:filesPage,troubleshooting:troublePage,glossary:glossaryPage,faq:faqPage};
 
-/* ---------- show and route ---------- */
+/* ---------- Functions page ---------- */
+let armed=null;
+function functionsPage(p){
+  const modeText=store.mode==='shared'?'Edits are saved for everyone who opens this page.'
+    :store.mode==='device'?'Edits are saved on this device only. To share them, use Backup below.':'Checking where edits are saved…';
+  const slow=store.mode==='shared'&&store.slow?' Saved edits may not have loaded yet.':'';
+  const rows=g=>{
+    const list=PAGES.filter(x=>x.group===g);
+    return list.map((x,i)=>{
+      const num=g==='chapter'?String(i+1):'';
+      const canEdit=!x.auto;
+      const del=x.id==='functions'?'':(armed===x.id?`<button type="button" class="btn small danger" data-act="del" data-id="${esc(x.id)}">Confirm remove</button>`:`<button type="button" class="btn small danger" data-act="del" data-id="${esc(x.id)}">Remove</button>`);
+      return `<li><span class="n">${num}</span><a href="#${esc(x.id)}">${esc(x.title)}</a><span class="btns">
+       <button type="button" class="btn small" data-act="up" data-id="${esc(x.id)}" aria-label="Move ${esc(x.title)} up"${i===0?' disabled':''}>Up</button>
+       <button type="button" class="btn small" data-act="down" data-id="${esc(x.id)}" aria-label="Move ${esc(x.title)} down"${i===list.length-1?' disabled':''}>Down</button>
+       ${canEdit?`<button type="button" class="btn small" data-act="edit-page" data-id="${esc(x.id)}">Edit</button>`:''}${del}</span></li>`;
+    }).join('');
+  };
+  const removed=[];
+  Object.keys(overrides).forEach(id=>{const o=overrides[id];if(!o||!o.deleted)return;
+    const b=BASE.find(x=>x.id===id);const t=b?b.title:(o.page&&o.page.title);if(t)removed.push({id:id,title:t})});
+  let h=`<h1>${esc(p.title)}</h1><p class="intro">Add pages, change their order and back up the content. To change what a page says, use the pencil icon at the top of that page.</p>${noticeHtml()}
+   <p class="secnote">${esc(modeText+slow)}${store.note?' '+esc(store.note):''}</p>
+   <section class="sec"><h2>Add a page</h2><p class="secnote">New pages appear in the contents straight away.</p>
+    <div class="inline"><div><label for="new-title">Title</label><input id="new-title" type="text" maxlength="120" placeholder="e.g. Month-end close"></div>
+     <div><label for="new-group">Where</label><select id="new-group"><option value="chapter">Chapter (a task or report)</option><option value="front">Front matter</option><option value="back">Back matter</option></select></div>
+     <button type="button" class="btn primary" data-act="add">Add page</button></div></section>
+   <section class="sec"><h2>Pages</h2><p class="secnote">Up and Down move a page within its group. Remove hides a page; it can be restored below.</p>
+    <ul class="pl"><h3>Front</h3>${rows('front')}<h3>Chapters</h3>${rows('chapter')}<h3>Back</h3>${rows('back')}</ul></section>`;
+  if(removed.length)h+=`<section class="sec"><h2>Removed pages</h2><ul class="pl">${removed.map(r=>`<li><span class="n"></span><span>${esc(r.title)}</span><span class="btns"><button type="button" class="btn small" data-act="restore" data-id="${esc(r.id)}">Restore</button></span></li>`).join('')}</ul></section>`;
+  h+=`<section class="sec backup"><h2>Backup</h2><p class="secnote">Every edit, order change and added page as text. Keep a copy somewhere safe, or paste one below to restore it.</p>
+    <div class="field"><label for="bk-out">Current edits</label><textarea id="bk-out" readonly>${esc(JSON.stringify(overrides,null,1))}</textarea></div>
+    <div class="actions" style="margin-top:12px;padding-top:0;border:0"><button type="button" class="btn" data-act="copy">Copy</button></div>
+    <div class="field"><label for="bk-in">Restore from a copy</label><textarea id="bk-in" placeholder="Paste a copy here"></textarea></div>
+    <div class="actions" style="margin-top:12px;padding-top:0;border:0"><button type="button" class="btn" data-act="import">Restore</button></div></section>`;
+  return shell(p,h);
+}
+
+/* ---------- editor ---------- */
+function editorPage(p){
+  const isCh=p.group==='chapter',base=BASE_IDS[p.id]&&overrides[p.id]&&overrides[p.id].page;
+  const modeText=store.mode==='shared'?'Saved changes show for everyone who opens this page.':'Saved changes are kept on this device only.';
+  let f=`<h1>Edit page</h1>${noticeHtml()}
+   <div class="field"><label for="ed-title">Title</label><input id="ed-title" type="text" maxlength="120" value="${esc(p.title)}"></div>`;
+  if(isCh){
+    f+=`<div class="fieldrow"><div class="field"><label for="ed-status">Status</label><select id="ed-status">${Object.keys(STATUS).map(k=>`<option value="${k}"${p.status===k?' selected':''}>${STATUS[k].label}</option>`).join('')}</select></div>
+     <div class="field"><label for="ed-when">When it happens</label><input id="ed-when" type="text" value="${esc(p.when)}" placeholder="e.g. Monday, before 9am"></div>
+     <div class="field"><label for="ed-slot">Short note for the weekly rhythm</label><input id="ed-slot" type="text" value="${esc(p.slot)}" placeholder="e.g. Due before 9am"></div>
+     <div class="field"><label for="ed-reviewed">Last reviewed</label><input id="ed-reviewed" type="text" value="${esc(p.reviewed)}" placeholder="e.g. 03 Nov 2026"></div></div>
+     <fieldset class="field"><legend>Shows on the weekly rhythm under</legend><div class="cad">${COLS.map(([k,n])=>`<label><input type="checkbox" name="cad" value="${k}"${p.cadence.includes(k)?' checked':''}>${n}</label>`).join('')}</div></fieldset>
+     <div class="field"><label for="ed-tags">Search words</label><input id="ed-tags" type="text" value="${esc(p.tags.join(', '))}"><span class="hint">Extra words people might search for, separated by commas.</span></div>`;
+  }
+  f+=`<div class="field"><label for="ed-intro">Introduction</label><textarea id="ed-intro" rows="3">${esc(p.intro)}</textarea></div>
+   <div class="field"><label for="ed-body">Content</label><textarea id="ed-body" class="tall" spellcheck="true">${esc(bodyToText(p.sections))}</textarea>
+    <details class="guide"><summary>How to format the content</summary><pre>${esc('## Section heading\nA plain line under a heading is a short note\n[ ] A checklist item\n1. A numbered step\n- A bullet\n  - A sub-point (indent two spaces)\n= TERM | meaning')}</pre></details></div>
+   <div class="field"><label for="ed-notes">Notes</label><textarea id="ed-notes" rows="3">${esc(p.notes.join('\n\n'))}</textarea><span class="hint">Each note is a paragraph. Leave a blank line between notes.</span></div>
+   <div class="field"><label for="ed-files">Files</label><textarea id="ed-files" rows="4">${esc(filesToText(p.files))}</textarea><span class="hint">One per line: type | name | note | link. Type is xlsx, pptx, docx, pdf or folder. The link is optional and must start with https.</span></div>
+   <div class="field"><label for="ed-contacts">Contacts</label><textarea id="ed-contacts" rows="3">${esc(contactsToText(p.contacts))}</textarea><span class="hint">One per line: name | what they help with.</span></div>
+   <div class="actions"><button type="button" class="btn primary" data-act="save">Save changes</button><button type="button" class="btn" data-act="cancel">Cancel</button>
+    ${base?'<button type="button" class="btn danger" data-act="reset">Reset to the starting content</button>':''}<span class="hint" style="font:400 13px var(--f-display);color:var(--muted)">${esc(modeText)}</span></div>`;
+  return shell(p,f,{editing:true});
+}
+function collectEdit(p){
+  const v=id=>{const e=$('#'+id);return e?e.value:''};
+  const isCh=p.group==='chapter';
+  const np=Object.assign({},p,{title:v('ed-title').trim()||p.title,intro:v('ed-intro').trim(),
+    sections:textToBody(v('ed-body')),
+    notes:v('ed-notes').split(/\n\s*\n/).map(t=>t.trim()).filter(Boolean),
+    files:textToFiles(v('ed-files')),contacts:textToContacts(v('ed-contacts'))});
+  if(isCh){
+    np.status=v('ed-status');np.when=v('ed-when').trim();np.slot=v('ed-slot').trim();np.reviewed=v('ed-reviewed').trim();
+    np.cadence=$$('input[name=cad]:checked',main).map(i=>i.value);
+    np.tags=v('ed-tags').split(',').map(t=>t.trim()).filter(Boolean);
+  }
+  return normPage(np,p.id,p.group);
+}
+
+/* ---------- show, route ---------- */
 const main=$('#main'),q=$('#q');
-let current='start',pendingSec=null;
-function show(id,sec){
-  const p=byId(id)||byId('start');current=p.id;
-  main.innerHTML=p.kind==='chapter'?chapterPage(p.ch):RENDER[p.id]();
+let current='start',pendingSec=null,editing=null;
+function pageHtml(p){
+  if(editing&&editing.id===p.id&&!p.auto)return editorPage(p);
+  if(p.auto==='rhythm')return rhythmPage(p);
+  if(p.auto==='people')return peoplePage(p);
+  if(p.auto==='files')return filesPage(p);
+  if(p.auto==='functions')return functionsPage(p);
+  return contentPage(p);
+}
+function show(id,sec,keep){
+  const p=byId(id)||byId('start')||PAGES[0];current=p.id;
+  main.innerHTML=pageHtml(p);
   $$('#toc a').forEach(a=>{a.getAttribute('data-id')===p.id?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current')});
+  if(keep)return;
   main.focus({preventScroll:true});
   const el=sec!=null&&sec>=0?$('#sec-'+sec):null;
   if(el){el.scrollIntoView();el.classList.add('flash')}else window.scrollTo(0,0);
@@ -524,22 +780,126 @@ function goTo(id,sec){
 function route(){
   const id=decodeURIComponent(location.hash.slice(1));
   q.value='';closeToc();
+  if(editing&&editing.id!==id)editing=null;
+  notice='';armed=null;
   const s=pendingSec;pendingSec=null;
   show(byId(id)?id:'start',s);
 }
 window.addEventListener('hashchange',route);
+function refreshAll(){
+  computePages();buildToc();buildIndex();
+  const ae=document.activeElement;
+  if(ae&&main.contains(ae)&&/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName))return;
+  if(q.value.trim()){renderSearch(q.value.trim());return}
+  if(editing&&byId(editing.id)){$$('#toc a').forEach(a=>{a.getAttribute('data-id')===current?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current')});return}
+  show(byId(current)?current:'start',null,true);
+}
+
+/* ---------- actions ---------- */
+function failMessage(e){
+  if(e&&e.code==='storage')return 'This browser blocked saving, so the change was not kept.';
+  if(e&&(e.code==='invalid_argument'||e.code==='not_granted'))return 'This page is view-only for you, so the change was not saved. Ask the owner for Contributor access.';
+  if(e&&e.code==='quota_exceeded')return 'The page store is full, so the change was not saved.';
+  return 'The change could not be saved. Try again in a moment.';
+}
+async function run(fn,okText){
+  try{await fn();if(okText)say(okText,false);return true}
+  catch(e){say(failMessage(e),true);return false}
+}
+const slug=t=>('p-'+(t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,36)||'page')+'-'+Math.random().toString(36).slice(2,6));
+async function addPage(){
+  const title=($('#new-title')||{value:''}).value.trim(),group=($('#new-group')||{value:'chapter'}).value;
+  if(!title){say('Give the page a title first.',true);show(current,null,true);return}
+  const id=slug(title),same=PAGES.filter(x=>x.group===group);
+  const order=(same.reduce((m,x)=>Math.max(m,x.order),group==='chapter'?90:group==='front'?0:880))+10;
+  const raw=group==='chapter'?{title:title,status:'draft',when:'To confirm',cadence:['tbc'],
+    prompts:['What it is and who it is for','When it needs doing and by whom','Where the files live','The steps, in order','Who to ask if it breaks']}:{title:title};
+  const ok=await run(()=>setOverride(id,{page:normPage(raw,id,group),order:order}));
+  if(!ok){show(current,null,true);return}
+  computePages();buildToc();buildIndex();
+  editing={id:id};say('Page added. Fill it in below.',false);
+  goTo(id);
+}
+async function move(id,dir){
+  const p=byId(id);if(!p)return;
+  const same=PAGES.filter(x=>x.group===p.group),i=same.indexOf(p),o=same[i+dir];if(!o)return;
+  let a=p.order,b=o.order;if(a===b)b=a+(dir>0?1:-1);
+  const ok=await run(async()=>{await setOverride(p.id,{order:b});await setOverride(o.id,{order:a})});
+  if(ok)say('Order changed.',false);
+  computePages();buildToc();buildIndex();show(current,null,true);
+}
+async function removePage(id){
+  if(armed!==id){armed=id;show(current,null,true);return}
+  armed=null;const p=byId(id),t=p?p.title:'Page';
+  const ok=await run(()=>setOverride(id,{deleted:true}),'“'+t+'” was removed. You can restore it below.');
+  computePages();buildToc();buildIndex();show(current,null,true);
+}
+async function restorePage(id){
+  await run(()=>setOverride(id,{deleted:false}),'Page restored.');
+  computePages();buildToc();buildIndex();show(current,null,true);
+}
+async function savePage(){
+  const p=byId(editing&&editing.id);if(!p)return;
+  const np=collectEdit(p);
+  const ok=await run(()=>setOverride(p.id,{page:np}),'Saved.');
+  if(ok){editing=null}
+  computePages();buildToc();buildIndex();show(current,null,true);
+}
+async function resetPage(){
+  const p=byId(editing&&editing.id);if(!p)return;
+  const ok=await run(()=>setOverride(p.id,{page:null}),'Page reset to the starting content.');
+  if(ok)editing=null;
+  computePages();buildToc();buildIndex();show(current,null,true);
+}
+async function importBackup(){
+  const raw=($('#bk-in')||{value:''}).value.trim();
+  if(!raw){say('Paste a copy into the box first.',true);show(current,null,true);return}
+  let o;try{o=JSON.parse(raw)}catch(e){say('That is not a valid copy. Nothing was changed.',true);show(current,null,true);return}
+  if(!o||typeof o!=='object'||Array.isArray(o)){say('That is not a valid copy. Nothing was changed.',true);show(current,null,true);return}
+  let n=0,ok=true;
+  for(const id of Object.keys(o)){
+    if(!/^[A-Za-z0-9_-]{1,80}$/.test(id))continue;
+    const v=o[id];if(!v||typeof v!=='object')continue;
+    const patch={};
+    if(v.page&&typeof v.page==='object'){const g=BASE_IDS[id]?BASE.find(b=>b.id===id).group:(GROUP_RANK[v.page.group]!=null?v.page.group:'chapter');patch.page=normPage(v.page,id,g)}
+    if(typeof v.order==='number')patch.order=v.order;
+    patch.deleted=v.deleted===true?true:false;
+    ok=await run(()=>setOverride(id,patch));
+    if(!ok)break;n++;
+  }
+  if(ok)say('Restored '+n+(n===1?' page.':' pages.'),false);
+  computePages();buildToc();buildIndex();show(current,null,true);
+}
 
 document.addEventListener('click',e=>{
   const a=e.target.closest('a[href^="#"]');
-  if(a&&!a.hasAttribute('data-nolink')){
+  if(a){
     const id=a.getAttribute('href').slice(1);
-    if(byId(id)){e.preventDefault();goTo(id,a.dataset.sec!=null?parseInt(a.dataset.sec,10):null)}
+    if(byId(id)){e.preventDefault();goTo(id,a.dataset.sec!=null?parseInt(a.dataset.sec,10):null);return}
   }
   const clr=e.target.closest('[data-clear]');
   if(clr){
     const id=clr.getAttribute('data-clear');
     Object.keys(ticks).forEach(k=>{if(k.indexOf(id+'-')===0)delete ticks[k]});saveTicks();
-    $$('input[data-tick]',main).forEach(i=>{i.checked=false});
+    $$('input[data-tick]',main).forEach(i=>{i.checked=false});return;
+  }
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const act=b.getAttribute('data-act'),id=b.getAttribute('data-id');
+  if(act==='edit'){editing={id:current};notice='';show(current,null)}
+  else if(act==='edit-page'){editing={id:id};notice='';goTo(id)}
+  else if(act==='cancel'){editing=null;notice='';show(current,null)}
+  else if(act==='save')savePage();
+  else if(act==='reset')resetPage();
+  else if(act==='add')addPage();
+  else if(act==='up')move(id,-1);
+  else if(act==='down')move(id,1);
+  else if(act==='del')removePage(id);
+  else if(act==='restore')restorePage(id);
+  else if(act==='import')importBackup();
+  else if(act==='copy'){
+    const t=$('#bk-out');if(!t)return;
+    const fallback=()=>{t.focus();t.select();say('Copy failed. The text is selected, so press copy on your keyboard.',true);};
+    try{navigator.clipboard.writeText(t.value).then(()=>{say('Copied.',false);show(current,null,true)},fallback)}catch(err){fallback()}
   }
 });
 main.addEventListener('change',e=>{
@@ -551,13 +911,17 @@ $('#tocbtn').addEventListener('click',()=>{
 });
 
 /* ---------- search ---------- */
-const INDEX=[];
-CHAPTERS.forEach(c=>{
-  INDEX.push({c,sec:-1,title:c.title,heading:'',tags:(c.tags||[]).join(' '),
-    body:[c.when,c.intro,(c.notes||[]).join(' '),(c.contacts||[]).map(x=>x.name+' '+x.why).join(' '),(c.files||[]).map(f=>f.name+' '+(f.note||'')).join(' '),STATUS[c.status].label].join(' '),
-    lines:[c.intro].concat(c.notes||[],[c.when]).filter(Boolean)});
-  (c.sections||[]).forEach((s,si)=>INDEX.push({c,sec:si,title:c.title,heading:s.h,tags:'',body:s.items.map(itemText).join(' '),lines:s.items.map(itemText)}));
-});
+let INDEX=[];
+function buildIndex(){
+  INDEX=[];
+  PAGES.forEach(c=>{
+    if(c.auto)return;
+    INDEX.push({c:c,sec:-1,title:c.title,heading:'',tags:c.tags.join(' '),
+      body:[c.when,c.intro,c.notes.join(' '),c.contacts.map(x=>x.name+' '+x.why).join(' '),c.files.map(f=>f.name+' '+f.note).join(' '),c.group==='chapter'?STATUS[c.status].label:''].join(' '),
+      lines:[c.intro].concat(c.notes,[c.when]).filter(Boolean)});
+    c.sections.forEach((s,si)=>INDEX.push({c:c,sec:si,title:c.title,heading:s.h,tags:'',body:[s.note].concat(s.items.map(itemText)).join(' '),lines:[s.note].concat(s.items.map(itemText)).filter(Boolean)}));
+  });
+}
 function groupsFor(text){
   const terms=text.toLowerCase().replace(/[“”"']/g,' ').split(/\s+/).filter(t=>t&&!STOP.has(t)&&t.length>1);
   return terms.map(t=>{const s=stem(t);const syn=SYN[t]||SYN[s]||[];return Array.from(new Set([s].concat(syn)))});
@@ -572,7 +936,7 @@ function scoreEntry(e,groups){
       best=Math.max(best,s)});
     if(best>0){matched++;total+=best}
   });
-  return {matched,total};
+  return {matched:matched,total:total};
 }
 function hl(text,variants){
   const vs=variants.slice().sort((a,b)=>b.length-a.length).map(v=>v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
@@ -583,7 +947,7 @@ function snippet(e,variants){
   const low=variants.map(v=>v.toLowerCase());
   let line=e.lines.find(l=>low.some(v=>l.toLowerCase().includes(v)))||e.lines[0]||'';
   if(line.length>180){
-    const idx=Math.max(0,Math.min(...low.map(v=>line.toLowerCase().indexOf(v)).filter(i=>i>=0).concat([0]))-50);
+    const idx=Math.max(0,Math.min.apply(null,low.map(v=>line.toLowerCase().indexOf(v)).filter(i=>i>=0).concat([0]))-50);
     line=(idx>0?'…':'')+line.slice(idx,idx+180)+'…';
   }
   return line;
@@ -591,7 +955,7 @@ function snippet(e,variants){
 function renderSearch(text){
   const groups=groupsFor(text);
   if(!groups.length){show(current);return}
-  const scored=INDEX.map(e=>Object.assign({e},scoreEntry(e,groups))).filter(r=>r.matched>0);
+  const scored=INDEX.map(e=>Object.assign({e:e},scoreEntry(e,groups))).filter(r=>r.matched>0);
   const best=scored.reduce((m,r)=>Math.max(m,r.matched),0);
   const hits=scored.filter(r=>r.matched===best).sort((a,b)=>b.total-a.total).slice(0,14);
   const all=[].concat.apply([],groups);
@@ -602,8 +966,8 @@ function renderSearch(text){
   }else{
     h+=`<p class="head">${hits.length} ${hits.length===1?'place':'places'} for “${esc(text)}”</p>`;
     h+=`<p class="also">${extra.length?'Also looked for: '+esc(extra.slice(0,8).join(', '))+'.':'Showing the best matches.'}</p>`;
-    h+=hits.map(r=>{const e=r.e,n=CHAPTERS.indexOf(e.c)+1;
-      return `<a class="hit" href="#${e.c.id}" data-sec="${e.sec}"><div class="where">Chapter ${n}${e.heading?' · '+hl(e.heading,all):''}</div><div class="ttl">${hl(e.c.title,all)}</div><p>${hl(snippet(e,all),all)}</p></a>`}).join('');
+    h+=hits.map(r=>{const e=r.e;
+      return `<a class="hit" href="#${esc(e.c.id)}" data-sec="${e.sec}"><div class="where">${esc(label(e.c))}${e.heading?' · '+hl(e.heading,all):''}</div><div class="ttl">${hl(e.c.title,all)}</div><p>${hl(snippet(e,all),all)}</p></a>`}).join('');
   }
   main.innerHTML=h+'</div>';
   window.scrollTo(0,0);
@@ -611,7 +975,28 @@ function renderSearch(text){
 q.addEventListener('input',()=>{const v=q.value.trim();if(v)renderSearch(v);else show(current)});
 q.addEventListener('keydown',e=>{if(e.key==='Escape'){q.value='';show(current)}});
 
-buildToc();
-route();
+/* ---------- start ---------- */
+let resolveStore;const storeReady=new Promise(r=>{resolveStore=r});
+computePages();buildToc();buildIndex();route();
+(async function(){
+  let timer=null;
+  try{
+    if(!window.claude||typeof window.claude.use!=='function')throw new Error('none');
+    const d=await window.claude.use('db');
+    if(!d)throw new Error('none');
+    db=d;store.mode='shared';
+    timer=setTimeout(()=>{store.slow=true;if(current==='functions')refreshAll()},10000);
+    db.collection('pages').onSnapshot(snap=>{
+      const o={};snap.docs.forEach(x=>{const v=x.data();if(v)o[x.id]=v});
+      overrides=o;
+      if(!snap.metadata.fromCache){store.slow=false;clearTimeout(timer)}
+      refreshAll();
+    },err=>{store.note='Shared edits are not available right now.';clearTimeout(timer);refreshAll()});
+  }catch(e){
+    store.mode='device';loadLocal();
+  }
+  resolveStore();
+  refreshAll();
+})();
 })();
 </script>
