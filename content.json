@@ -1,1 +1,499 @@
-{}
+{
+ "finance-figures": {
+  "page": {
+   "id": "finance-figures",
+   "group": "chapter",
+   "title": "M&S Finance Figures",
+   "status": "active",
+   "when": "Monday, before 9am",
+   "slot": "Due before 9am",
+   "reviewed": "",
+   "intro": "Weekly finance figures. They must be saved to the weekly finance figures folder and also sent separately by email before 9am on Monday.",
+   "cadence": [
+    "mon"
+   ],
+   "tags": [
+    "hours",
+    "labour",
+    "flex",
+    "overtime",
+    "budget",
+    "balance",
+    "deadline",
+    "late",
+    "money"
+   ],
+   "prompts": [],
+   "sections": [
+    {
+     "h": "Hours vs Flex tab",
+     "kind": "checks",
+     "note": "",
+     "items": [
+      "No major overspends vs budget",
+      "Well-managed stranded labour hours have been reported",
+      "The new picking prods have been hit (check for w/c 16/08, not this week)",
+      "Stock tasks line does not exceed 66 hours per day (check for w/c 16/08, not this week)"
+     ]
+    },
+    {
+     "h": "Finance tab",
+     "kind": "checks",
+     "note": "",
+     "items": [
+      "Overtime hours, if any are used, are recorded in the overtime hours column",
+      "All hours balance back (the table at the bottom of the finance tab should all be true)"
+     ]
+    },
+    {
+     "h": "Saving and sending",
+     "kind": "steps",
+     "note": "",
+     "items": [
+      "Save the file into the weekly finance figures folder",
+      "Also send it separately by email before 9am on Monday"
+     ]
+    }
+   ],
+   "files": [
+    {
+     "name": "Weekly finance figures folder",
+     "type": "folder",
+     "note": "",
+     "link": "https://gxologistics.sharepoint.com/sites/Sherburn/Planning/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FSherburn%2FPlanning%2FShared%20Documents%2FWeekly%20LMTs%2FFinalised%20Finance%20Figures&viewid=1bc038a9%2Dc5e3%2D4cc9%2Da618%2D835303f1fe53"
+    }
+   ],
+   "notes": [],
+   "contacts": [
+    {
+     "name": "Simona",
+     "why": "Can help with any questions on balancing hours on the finance tab"
+    }
+   ]
+  }
+ },
+ "std-e2e": {
+  "page": {
+   "id": "std-e2e",
+   "group": "chapter",
+   "title": "STD Shipped E2E Slide",
+   "status": "active",
+   "when": "Weekly, after the Sunday email",
+   "slot": "After the Sunday email",
+   "reviewed": "",
+   "intro": "Three files are updated in order: the data sheet, the visual file, then the slide.",
+   "cadence": [
+    "tbc"
+   ],
+   "tags": [
+    "std",
+    "e2e",
+    "shipped",
+    "service",
+    "capacity",
+    "slide",
+    "data sheet",
+    "weekly"
+   ],
+   "prompts": [],
+   "sections": [
+    {
+     "h": "1. Update the data sheet",
+     "kind": "steps",
+     "note": "",
+     "items": [
+      "Find Justin’s STD shipped email from Sunday (the full week) and open the attachment",
+      "Open the data sheet, 16-08.xlsx",
+      "Copy the full previous week and paste it into the first blank column to add a new week",
+      "Delete all the manual inputs",
+      "Paste the data from Justin’s email into the relevant spots"
+     ]
+    },
+    {
+     "h": "2. Update the visual file",
+     "kind": "steps",
+     "note": "",
+     "items": [
+      "Open STD Service Vs Cap E2E.xlsx (it holds a tab for each week)",
+      "Copy the most recent week’s tab, create a new one and rename it for the previous week",
+      "Adjust the date range",
+      "The formulas pull through the new information from the data sheet"
+     ]
+    },
+    {
+     "h": "3. Build the slide",
+     "kind": "steps",
+     "note": "",
+     "items": [
+      "Open the E2E slide template, E2E WK 19.pptx, and populate it with commentary"
+     ]
+    }
+   ],
+   "files": [
+    {
+     "name": "16-08.xlsx",
+     "type": "xlsx",
+     "note": "Data sheet",
+     "link": "https://gxologistics.sharepoint.com/:x:/r/sites/Sherburn/Planning/Shared Documents/~ Planning/Planning Team/Jack/16-08.xlsx?d=w1ff6b03536f5435798e74428ded8e0e9&csf=1&web=1&e=hGEije"
+    },
+    {
+     "name": "STD Service Vs Cap E2E.xlsx",
+     "type": "xlsx",
+     "note": "Visual file, one tab per week",
+     "link": "https://gxologistics.sharepoint.com/:x:/r/sites/Sherburn/Planning/Shared Documents/~ Planning/Planning Team/Jack/STD Service Vs Cap E2E.xlsx?d=wc94ea3197bc9418e8de28223a270d5e2&csf=1&web=1&e=VlAWlV"
+    },
+    {
+     "name": "E2E WK 19.pptx",
+     "type": "pptx",
+     "note": "Slide template",
+     "link": "https://gxologistics.sharepoint.com/:p:/r/sites/Sherburn/Planning/Shared Documents/~ Planning/Planning Team/Jack/E2E WK 19.pptx?d=w875950b408af4b30ae9a7624b1bc5cb4&csf=1&web=1&e=aB28Wd"
+    }
+   ],
+   "notes": [],
+   "contacts": [
+    {
+     "name": "Justin",
+     "why": "Sends the STD shipped email on Sundays"
+    }
+   ]
+  }
+ },
+ "peak-review": {
+  "page": {
+   "id": "peak-review",
+   "group": "chapter",
+   "title": "M&S PIR Peak Review",
+   "status": "active",
+   "when": "Monday and Tuesday",
+   "slot": "Slides for the peak call",
+   "reviewed": "",
+   "intro": "The slides in the main body are updated weekly on Monday or Tuesday, ready for the peak call.",
+   "cadence": [
+    "mon",
+    "tue"
+   ],
+   "tags": [
+    "pir",
+    "peak",
+    "action log",
+    "slides",
+    "call",
+    "weekly"
+   ],
+   "prompts": [],
+   "sections": [],
+   "files": [
+    {
+     "name": "TC, OL & SB - Peak 2026.pptx",
+     "type": "pptx",
+     "note": "Peak review slides",
+     "link": "https://gxologistics.sharepoint.com/:p:/s/ThorncliffePlanning/IQD8iOnGpCJwTodrP05EcM-MATCuEOgaL9Tb0ok_oCCxE0M?e=pSZrmT"
+    },
+    {
+     "name": "All Sites Peak Actions.xlsx",
+     "type": "xlsx",
+     "note": "Action log",
+     "link": "https://gxologistics.sharepoint.com/:x:/s/ThorncliffePlanning/IQCPLC96EzUqQ43cL5-W2_PTAVrHN5XV48CaSQhJVIm1Hbc?e=Cei1RD"
+    }
+   ],
+   "notes": [
+    "If access is needed, both files belong to Ben Smith."
+   ],
+   "contacts": [
+    {
+     "name": "Ben Smith",
+     "why": "Owns the peak review slides and the action log"
+    }
+   ]
+  }
+ },
+ "hannah-peak": {
+  "page": {
+   "id": "hannah-peak",
+   "group": "chapter",
+   "title": "Hannah Myles Peak Slides",
+   "status": "handed",
+   "when": "End of every month",
+   "slot": "Actions and risks slides",
+   "reviewed": "",
+   "intro": "At the end of every month, Hannah requests the actions and risks slides to be updated and shared.",
+   "cadence": [
+    "month"
+   ],
+   "tags": [
+    "peak",
+    "actions",
+    "risks",
+    "slides",
+    "monthly",
+    "month end"
+   ],
+   "prompts": [],
+   "sections": [],
+   "files": [
+    {
+     "name": "Hannah Peak Slides 2209.pptx",
+     "type": "pptx",
+     "note": "Template",
+     "link": "https://gxologistics.sharepoint.com/:p:/r/sites/Sherburn/Planning/Shared Documents/~ Planning/Planning Team/Jack/Hannah Peak Slides 2209.pptx?d=wb168addc19e1407b8fcf1c4495dd0aa9&csf=1&web=1&e=uPMzlc"
+    }
+   ],
+   "notes": [
+    "The operation has picked this up. Because the peak slides are updated weekly for TC, SB and OL, Ben has been sharing the SB detail with Hannah from the action log. I usually check it has been sent each month."
+   ],
+   "contacts": [
+    {
+     "name": "Hannah Myles",
+     "why": "Requests the monthly actions and risks slides"
+    },
+    {
+     "name": "Ben Smith",
+     "why": "Shares the SB detail with Hannah from the action log"
+    }
+   ]
+  }
+ },
+ "cc-forecast": {
+  "page": {
+   "id": "cc-forecast",
+   "group": "chapter",
+   "title": "C&C Volume Forecast",
+   "status": "reference",
+   "when": "On request",
+   "slot": "If Ethan or Bea ask",
+   "reviewed": "",
+   "intro": "Not shared with the customer. It was mainly used to forecast the test volume.",
+   "cadence": [
+    "req"
+   ],
+   "tags": [
+    "c&c",
+    "forecast",
+    "mrf",
+    "trailer",
+    "parcels",
+    "cage",
+    "volume",
+    "test volume"
+   ],
+   "prompts": [],
+   "sections": [
+    {
+     "h": "Before use",
+     "kind": "steps",
+     "note": "",
+     "items": [
+      "Make sure the latest MRF is dropped into the MRF/Weekly tab"
+     ]
+    },
+    {
+     "h": "What the file holds",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "The C&C volume forecast, based on the latest forecast and MRF splits, plus the hourly drop-in profiles",
+      "A trailer plan based on an input of parcels per cage, which projects any failed parcels"
+     ]
+    }
+   ],
+   "files": [
+    {
+     "name": "C&C Profile.xlsx",
+     "type": "xlsx",
+     "note": "undefined",
+     "link": "https://gxologistics.sharepoint.com/:x:/r/sites/Sherburn/Planning/Shared Documents/M%26S File Downloads/C%26C Profile.xlsx?d=wc29289ab3dd74f7886d05e37057a8096&csf=1&web=1&e=9XyWxg"
+    }
+   ],
+   "notes": [
+    "Ethan also asks for it when volume from the TC side needs confirming. There is no recurring touch point. It is left here as a reference in case Ethan or Bea request it."
+   ],
+   "contacts": [
+    {
+     "name": "Ethan",
+     "why": "Requests the volume when TC volume needs confirming"
+    },
+    {
+     "name": "Bea",
+     "why": "May request the C&C forecast"
+    }
+   ]
+  }
+ },
+ "planning-review": {
+  "page": {
+   "id": "planning-review",
+   "group": "chapter",
+   "title": "M&S Weekly Planning Review Pack",
+   "status": "active",
+   "when": "Weekly",
+   "slot": "Six-slide pack",
+   "reviewed": "",
+   "intro": "Updated in the planning model first, then carried onto six slides.",
+   "cadence": [
+    "tbc"
+   ],
+   "tags": [
+    "planning",
+    "review",
+    "flow plan",
+    "mrf",
+    "recruitment",
+    "prop model",
+    "stockholding",
+    "carrier capacities",
+    "pack",
+    "slides",
+    "weekly",
+    "rtv",
+    "ash",
+    "overtime"
+   ],
+   "prompts": [],
+   "sections": [
+    {
+     "h": "Before the slides: update the planning model",
+     "kind": "steps",
+     "note": "",
+     "items": [
+      "Update the flow plan in the planning model",
+      "Make sure the lines match up (some have changed since the template was created)",
+      "Copy the most recent publish at the top into the previous publish section, again checking the lines match (part copy and paste is needed)",
+      "Hide the previous week in the weekly summary"
+     ]
+    },
+    {
+     "h": "Slide 1: Flow Plan, Variances to Previous Forecast",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "Use the weekly summary variance to previous forecast, flow plan variance to locks and flow plan variance to MRF tables in the planning model",
+      "For flow plan variance to locks and to MRF, copy and paste the last column to extend by one week each update",
+      "Add relevant commentary on the slide"
+     ]
+    },
+    {
+     "h": "Slide 2: Mid-Term Plan",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "Use the planned volume section of the weekly summary",
+      {
+       "t": "Make sure there is no roll on Outbound, using these methods:",
+       "sub": [
+        "Adjust RTV weeks (make sure the total matches back to the flow plan)",
+        "Add overtime or adjust ASH in the recruitment plan",
+        "Add support hours at the bottom of the outbound tab to increase the cap"
+       ]
+      },
+      "Add any adjustments as comments. They pull through automatically into the next slide (People)"
+     ]
+    },
+    {
+     "h": "Slide 3: Resource Impact",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "Copy and paste the recruitment graph from the visual tab of the planning model",
+      "Adjust the call-outs that overlay the graph to add commentary",
+      "Update the commentary above to the total recruitment"
+     ]
+    },
+    {
+     "h": "Slide 4: ECOM View, Prop Model",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "Open the prop model tab on the planning model",
+      "Make sure the shortage on the far right does not exceed 1k on an individual day",
+      "Add in any moves required, and make sure the cap exceeds the drop-in over the extended period"
+     ]
+    },
+    {
+     "h": "Slide 5: Stockholding Projections",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "The graph does not need to change, because it is based on MRFs",
+      "Update the tables using the stocks space tracker"
+     ]
+    },
+    {
+     "h": "Slide 6: Carrier Capacities",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "This section needs to be revised once the new carrier plans (C&C etc.) are implemented"
+     ]
+    }
+   ],
+   "files": [
+    {
+     "name": "Weekly Planning Review",
+     "type": "folder",
+     "note": "Folder with the templates",
+     "link": "https://gxologistics.sharepoint.com/:f:/r/sites/Sherburn/Planning/Shared Documents/~ Planning/M%26S/Weekly Planning Review?d=w7040318e73bc401bad835bc73a1ac43f&csf=1&web=1&e=85hkIv"
+    },
+    {
+     "name": "SPACE TRACKING' MARKS AND SPENCER 2026 V1.xlsx",
+     "type": "xlsx",
+     "note": "Stocks space tracker",
+     "link": "https://gxologistics.sharepoint.com/:x:/r/sites/Sherburn/Shared Documents/Marks %26 Spencer/Stock Team Folder/Space tracking/SPACE TRACKING%27 MARKS AND SPENCER 2026 V1.xlsx?d=wcb71e4d104324057aea8e44310a0a4ba&csf=1&web=1&e=EXHg9e"
+    }
+   ],
+   "notes": [],
+   "contacts": []
+  }
+ },
+ "brands-pva": {
+  "page": {
+   "id": "brands-pva",
+   "group": "chapter",
+   "title": "Brands PVA",
+   "status": "handed",
+   "when": "Weekly",
+   "slot": "Handed to the operation",
+   "reviewed": "",
+   "intro": "Handed over to the operation. The steps are kept here for reference.",
+   "cadence": [
+    "tbc"
+   ],
+   "tags": [
+    "brands",
+    "pva",
+    "sherburn",
+    "site summary",
+    "compliance",
+    "h&s",
+    "bookings",
+    "report"
+   ],
+   "prompts": [],
+   "sections": [
+    {
+     "h": "Steps",
+     "kind": "steps",
+     "note": "",
+     "items": [
+      "Paste the daily report into the Sherburn tab, and fill in the table at the top right with the compliance and H&S information",
+      "Add the usual comments into each section (check previous weeks’ files)",
+      "On the internal call, check bookings and run through the report. After any changes, paste the report in again",
+      "There is no need to share it. TC share the combined file"
+     ]
+    }
+   ],
+   "files": [
+    {
+     "name": "M&S Weekly Site Summary.xlsx",
+     "type": "xlsx",
+     "note": "New format",
+     "link": "https://gxologistics.sharepoint.com/:x:/r/sites/ThorncliffePlanning/Shared Documents/M%26S Reporting/M%26S Weekly Site Summary.xlsx?d=w9ab001b9d8d24355b0531a9923306288&csf=1&web=1&e=lE86dD"
+    }
+   ],
+   "notes": [],
+   "contacts": []
+  }
+ },
+ "start": {
+  "deleted": true
+ }
+}
