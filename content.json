@@ -495,5 +495,427 @@
  },
  "start": {
   "deleted": true
+ },
+ "monthly-packs": {
+  "page": {
+   "id": "monthly-packs",
+   "group": "chapter",
+   "title": "Monthly Packs",
+   "status": "active",
+   "when": "Monthly, from the monthly email",
+   "slot": "Customer presentation packs",
+   "reviewed": "",
+   "intro": "Each month an email arrives with links to all the customer presentation packs. Every file sits in the Planning Team SharePoint folder, and the main working file is Planning Monthly Packs.",
+   "cadence": [
+    "month"
+   ],
+   "tags": [
+    "monthly",
+    "packs",
+    "customer",
+    "people slide",
+    "executive summary",
+    "headcount",
+    "master list",
+    "leavers",
+    "attrition",
+    "recruitment",
+    "hr",
+    "volume",
+    "manchester united",
+    "raging bull",
+    "revelyst",
+    "mint velvet",
+    "williams",
+    "miniso",
+    "m&s",
+    "sherburn",
+    "thorncliffe",
+    "ollerton",
+    "checks",
+    "quarterly",
+    "imran",
+    "justin",
+    "report",
+    "deck",
+    "slides",
+    "reporting period"
+   ],
+   "prompts": [],
+   "sections": [
+    {
+     "h": "How the packs are built",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "Receive the monthly email containing links to all customer presentation packs",
+      "Access all files through the Planning Team SharePoint folder",
+      "The main working file is Planning Monthly Packs",
+      {
+       "t": "Most packs follow the same structure:",
+       "sub": [
+        "People slide",
+        "Executive Summary",
+        "Volume or Operational Performance slides (where applicable)"
+       ]
+      }
+     ]
+    },
+    {
+     "h": "Key rule",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      {
+       "t": "Update only the red tabs in the Planning Monthly Packs workbook:",
+       "sub": [
+        "Master List",
+        "Leavers"
+       ]
+      }
+     ]
+    },
+    {
+     "h": "Workbook: Master List tab",
+     "kind": "steps",
+     "note": "",
+     "items": [
+      "Open the latest Master List sent by Justin",
+      "Use the version from the 1st day of the new month (it captures the previous month’s changes)",
+      "Remove any filters",
+      "Copy all data",
+      "Paste into the Master List tab in Planning Monthly Packs",
+      "Delete the old data before pasting"
+     ]
+    },
+    {
+     "h": "Workbook: Leavers tab",
+     "kind": "steps",
+     "note": "",
+     "items": [
+      "Open the latest Leavers report",
+      "Remove any filters",
+      "Copy all data to the bottom",
+      "Paste into the Leavers tab in Planning Monthly Packs",
+      "Delete the previous data first"
+     ]
+    },
+    {
+     "h": "Workbook: change the reporting period",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "Update the reporting period to the month being reported",
+      {
+       "t": "Example:",
+       "sub": [
+        "October reporting = 01/10/XXXX"
+       ]
+      },
+      "Headcount and other metrics refresh automatically"
+     ]
+    },
+    {
+     "h": "Standard People slide: what to populate",
+     "kind": "bullets",
+     "note": "Applies to most customer packs. Take these from the Planning Monthly Packs workbook.",
+     "items": [
+      "Headcount",
+      "Recruitment Forecast",
+      "Actual Recruitment",
+      "Planned Attrition",
+      "Actual Attrition",
+      "Colleague Leavers",
+      "Agency Leavers"
+     ]
+    },
+    {
+     "h": "Standard People slide: do not change",
+     "kind": "bullets",
+     "note": "These are maintained by HR.",
+     "items": [
+      "Absence figures",
+      "Short-term absence",
+      "Long-term absence",
+      "HR-managed fields"
+     ]
+    },
+    {
+     "h": "Executive Summary process",
+     "kind": "bullets",
+     "note": "For packs that contain an Executive Summary.",
+     "items": [
+      {
+       "t": "Headcount",
+       "sub": [
+        "Enter the current headcount"
+       ]
+      },
+      {
+       "t": "Headcount vs Plan",
+       "sub": [
+        "Compare recruitment achieved vs plan",
+        "Compare attrition achieved vs plan",
+        "Estimate the end position",
+        "Keep adjustments sensible (avoid excessive changes)"
+       ]
+      },
+      {
+       "t": "Attrition",
+       "sub": [
+        "Planned attrition is usually 3.0%-3.4%",
+        "Actual attrition uses the current month figures"
+       ]
+      },
+      {
+       "t": "Leave unchanged",
+       "sub": [
+        "Dismissals",
+        "Absence",
+        "Other HR-owned measures"
+       ]
+      }
+     ]
+    },
+    {
+     "h": "Manchester United pack: what to update",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "People slide: standard process",
+      "Executive Summary: standard process",
+      {
+       "t": "Volume slides: three graphs",
+       "sub": [
+        "Inbound",
+        "Outbound",
+        "Returns"
+       ]
+      },
+      "Source file: United Monthly Pack Forecast Variance Graphs"
+     ]
+    },
+    {
+     "h": "Manchester United pack: data sources",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      {
+       "t": "Inbound",
+       "sub": [
+        "SOD: Receipt Breakdown",
+        "Actual = Inbound Stock",
+        "Forecast = Total Forecast Units"
+       ]
+      },
+      {
+       "t": "Outbound",
+       "sub": [
+        "SOD: Daily Unit Volume",
+        "Exclude letters, numbers and badges"
+       ]
+      },
+      {
+       "t": "Returns",
+       "sub": [
+        "Use the Returns tab: Returns Actual and Returns Forecast"
+       ]
+      }
+     ]
+    },
+    {
+     "h": "Manchester United pack: graph updates",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "Extend the date ranges to month-end",
+      "Make sure the graph ranges include all dates",
+      "Keep the graph sizes consistent",
+      {
+       "t": "Populate:",
+       "sub": [
+        "Forecast",
+        "Actual",
+        "Variance",
+        "Variance %"
+       ]
+      }
+     ]
+    },
+    {
+     "h": "Manchester United pack: final check after HR updates",
+     "kind": "checks",
+     "note": "HR sometimes replaces entire slides from templates.",
+     "items": [
+      "Confirm the People slide still contains the Planning figures",
+      "Re-enter the Planning metrics if they have been removed"
+     ]
+    },
+    {
+     "h": "Raging Bull pack",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "Update the People slide",
+      "Update the Executive Summary",
+      "There is no Volume slide, so only headcount-related updates are required"
+     ]
+    },
+    {
+     "h": "Revelyst pack",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "Update headcount only",
+      "There is no Executive Summary",
+      {
+       "t": "Additional check: verify the Operational Performance tables",
+       "sub": [
+        "Operational Performance",
+        "Forecast vs Actual"
+       ]
+      },
+      "These are normally updated by Operations, but check the accuracy before publication"
+     ]
+    },
+    {
+     "h": "Mint Velvet pack",
+     "kind": "bullets",
+     "note": "Quarterly update only. It is not updated every month.",
+     "items": [
+      "Update in January, April, July and October",
+      {
+       "t": "People section",
+       "sub": [
+        "Headcount",
+        "Recruitment (for the rolling 3-month period)"
+       ]
+      },
+      {
+       "t": "Graphs",
+       "sub": [
+        "Use the Mint Velvet Planning Model",
+        "The workforce graph is updated by Imran",
+        "Drop the latest graph into the deck"
+       ]
+      },
+      {
+       "t": "Volume graphs",
+       "sub": [
+        "Use the dedicated Mint Velvet graph file",
+        "Pull volumes from the Mint Velvet SOD"
+       ]
+      },
+      "Executive Summary: standard update process"
+     ]
+    },
+    {
+     "h": "Williams pack",
+     "kind": "steps",
+     "note": "There is no People slide and no Executive Summary. Only the Planning slide needs updating. Source file: Williams Monthly Pack Slide.",
+     "items": [
+      "Extend the date range",
+      {
+       "t": "Update:",
+       "sub": [
+        "Retail Volume",
+        "E-commerce Volume",
+        "Total Volume"
+       ]
+      },
+      "Pull the forecast from the Planning Model",
+      "Confirm the graph populates correctly",
+      "Update the callouts and commentary"
+     ]
+    },
+    {
+     "h": "Miniso pack",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "Update the Headcount slide",
+      "Update the Executive Summary",
+      "There is no volume reporting. Do a quick review only, to make sure no additional slides need refreshing"
+     ]
+    },
+    {
+     "h": "M&S packs",
+     "kind": "bullets",
+     "note": "",
+     "items": [
+      "Typically completed by Imran",
+      {
+       "t": "Covers:",
+       "sub": [
+        "Sherburn",
+        "Thorncliffe",
+        "Ollerton"
+       ]
+      },
+      "Approximately 300 slides across the sites",
+      "No routine action is required unless you are specifically asked to provide cover"
+     ]
+    },
+    {
+     "h": "Key checks before sending: every pack",
+     "kind": "checks",
+     "note": "",
+     "items": [
+      "Verify the reporting month and date",
+      "Check the headcount figures",
+      "Confirm the Executive Summary matches the People slide",
+      "Check the graph date ranges",
+      "Make sure all forecast and actual data has refreshed",
+      "Review the formatting after updates"
+     ]
+    },
+    {
+     "h": "Key checks before sending: after HR updates",
+     "kind": "checks",
+     "note": "",
+     "items": [
+      "Re-check the People slides",
+      "Confirm the Planning metrics have not been overwritten"
+     ]
+    }
+   ],
+   "files": [
+    {
+     "name": "Planning Monthly Packs",
+     "type": "xlsx",
+     "note": "Main working file",
+     "link": "https://gxologistics.sharepoint.com/:x:/r/sites/Sherburn/Planning/Shared%20Documents/~%20Planning/Planning%20Team/Jack/Planning%20Monthly%20Packs.xlsx?d=w677bc17bd13646af810fc1735b2b78b3&csf=1&web=1&e=gCxMTB"
+    },
+    {
+     "name": "Planning Team SharePoint folder",
+     "type": "folder",
+     "note": "Holds every pack",
+     "link": "https://gxologistics.sharepoint.com/:f:/r/sites/Sherburn/Planning/Shared%20Documents/~%20Planning/Planning%20Team/Jack?d=wd8a0f28dd79949618c36d5c7cd2dcdd0&csf=1&web=1&e=l2HM4M"
+    },
+    {
+     "name": "United Monthly Pack Forecast Variance Graphs",
+     "type": "file",
+     "note": "Manchester United volume graphs",
+     "link": "https://gxologistics.sharepoint.com/:x:/r/sites/Sherburn/Planning/Shared%20Documents/~%20Planning/Planning%20Team/Jack/United%20Monthly%20Pack%20FC%20Variance%20Graphs.xlsx?d=wab553220b4704c5cb2f54ffa435f0cb6&csf=1&web=1&e=MK4dcQ"
+    },
+    {
+     "name": "Williams Monthly Pack Slide",
+     "type": "file",
+     "note": "Source file for the Williams pack",
+     "link": "https://gxologistics.sharepoint.com/:x:/r/sites/Sherburn/Planning/Shared%20Documents/~%20Planning/Planning%20Team/Jack/Williams%20Monthly%20Pack%20Slide.xlsx?d=wdee533368b9b434d95f1adfd3a0ee61e&csf=1&web=1&e=V1pUXL"
+    }
+   ],
+   "notes": [],
+   "contacts": [
+    {
+     "name": "Justin",
+     "why": "Sends the latest Master List"
+    },
+    {
+     "name": "Imran",
+     "why": "Updates the Mint Velvet workforce graph, and typically completes the M&S packs"
+    }
+   ]
+  }
  }
 }
