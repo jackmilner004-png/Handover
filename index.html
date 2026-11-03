@@ -1,0 +1,617 @@
+<title>Reporting Handover</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Layout concept: a reference book. Sticky search bar, contents in a left margin, each chapter set as one paper page with a running head and folio. */
+:root{
+  --bg:#E7ECE9; --paper:#FBFCFB; --ink:#16211F; --muted:#566663; --rule:#CAD3CF;
+  --accent:#0E5C54; --accent-ink:#FFFFFF; --accent-soft:#D6E9E5;
+  --draft:#7A4E00; --draft-bg:#F7E9C8; --handed:#464C86; --handed-bg:#E4E5F5; --ref:#4F5B59; --ref-bg:#DFE6E3;
+  --mark:#FFE79A;
+  --f-display:'Schibsted Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-body:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1514; --paper:#162120; --ink:#E5EEEB; --muted:#93A6A2; --rule:#2B3A38;
+    --accent:#62C4B6; --accent-ink:#07211D; --accent-soft:#1B3935;
+    --draft:#F0C46A; --draft-bg:#3A2F14; --handed:#B4B8F0; --handed-bg:#272B4A; --ref:#A8B7B4; --ref-bg:#243130;
+    --mark:#6B5A12; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1514; --paper:#162120; --ink:#E5EEEB; --muted:#93A6A2; --rule:#2B3A38;
+  --accent:#62C4B6; --accent-ink:#07211D; --accent-soft:#1B3935;
+  --draft:#F0C46A; --draft-bg:#3A2F14; --handed:#B4B8F0; --handed-bg:#272B4A; --ref:#A8B7B4; --ref-bg:#243130;
+  --mark:#6B5A12; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:96px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);border-bottom:1px solid var(--rule);padding-block:12px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"brand search btn";gap:10px 20px;align-items:center}
+.brand{grid-area:brand;display:flex;flex-direction:column;line-height:1.15;text-decoration:none;color:var(--ink)}
+.brand b{font:700 19px/1.1 var(--f-display);letter-spacing:-.01em}
+.brand span{font:400 11.5px var(--f-mono);color:var(--muted);letter-spacing:.04em;margin-top:4px}
+.search{grid-area:search;position:relative;max-width:560px;width:100%;justify-self:end}
+.search input{width:100%;font:400 16px var(--f-display);color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:10px 12px;appearance:none}
+.search input::placeholder{color:var(--muted)}
+.tocbtn{grid-area:btn;display:none;font:600 14px var(--f-display);color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:10px 14px;cursor:pointer}
+@media (max-width:899px){
+  .top{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"brand btn" "search search"}
+  .tocbtn{display:inline-block}
+  .search{max-width:none;justify-self:stretch}
+}
+
+/* shell */
+.shell{display:grid;grid-template-columns:276px minmax(0,1fr);gap:36px;padding-top:24px;align-items:start}
+.toc{font-family:var(--f-display)}
+@media (min-width:900px){
+  .toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px);max-height:calc(100vh - 110px);overflow:auto;padding-right:6px}
+}
+@media (max-width:899px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:16px}
+  .toc{display:none;background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:12px}
+  .toc.open{display:block}
+}
+.toc h2{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:18px 8px 6px}
+.toc h2:first-child{margin-top:0}
+.toc a{display:grid;grid-template-columns:26px minmax(0,1fr) 12px;align-items:center;gap:4px;padding:7px 8px;border-radius:4px;color:var(--ink);text-decoration:none;font-size:14.5px;line-height:1.3}
+.toc a:hover{background:var(--accent-soft)}
+.toc a[aria-current="page"]{background:var(--accent-soft);font-weight:600}
+.toc .n{font:400 12px var(--f-mono);color:var(--muted)}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;justify-self:end}
+.d-active{background:var(--accent)} .d-handed{background:var(--handed)} .d-reference{background:var(--ref)}
+.d-draft{border:2px solid var(--draft);background:transparent}
+.legend{display:grid;gap:4px;margin:18px 8px 0;font:400 12px var(--f-display);color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:8px}
+.legend .dot{justify-self:auto}
+
+/* page */
+main{min-width:0;outline:none}
+.page{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:22px clamp(18px,4vw,44px) 26px;box-shadow:0 14px 30px -26px rgba(0,0,0,.45);max-width:800px}
+.runhead{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:500 11.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.page h1{font:700 clamp(27px,4.4vw,38px)/1.12 var(--f-display);letter-spacing:-.02em;margin:26px 0 14px;text-wrap:balance}
+.chip{font:500 11px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:3px;display:inline-block;white-space:nowrap}
+.s-active{background:var(--accent-soft);color:var(--accent)}
+.s-handed{background:var(--handed-bg);color:var(--handed)}
+.s-ref{background:var(--ref-bg);color:var(--ref)}
+.s-draft{background:var(--draft-bg);color:var(--draft)}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px 24px;margin:0 0 22px;padding:14px 0;border-block:1px solid var(--rule)}
+.meta div{min-width:0}
+.meta dt{font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.meta dd{margin:0;font:500 15px/1.4 var(--f-display)}
+.meta dd small{display:block;font:400 13px var(--f-display);color:var(--muted)}
+.intro{font-size:18.5px;margin:0 0 8px}
+.sec{padding-top:22px;margin-top:22px;border-top:1px solid var(--rule)}
+.sec h2,.block h2{font:600 19px/1.25 var(--f-display);letter-spacing:-.005em;margin:0 0 10px;text-wrap:balance}
+.secnote{margin:0 0 10px;color:var(--muted);font-size:15.5px}
+.page ul,.page ol{margin:0;padding-left:1.3em;display:grid;gap:8px}
+.page li ul{margin-top:8px}
+.steps li::marker{color:var(--accent);font:500 14px var(--f-mono)}
+.list li::marker{color:var(--muted)}
+.checks{list-style:none;padding-left:0 !important}
+.checks label{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.checks input{width:19px;height:19px;margin:4px 0 0;flex:none;accent-color:var(--accent)}
+.checks input:checked + span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--rule)}
+.tickbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:14px;font:400 13px var(--f-display);color:var(--muted)}
+.linkbtn{font:500 13px var(--f-display);color:var(--accent);background:none;border:0;padding:4px 0;cursor:pointer;text-decoration:underline}
+.block{margin-top:26px;padding-top:22px;border-top:1px solid var(--rule)}
+.files{list-style:none;padding:0 !important;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px !important}
+.files li{display:flex;gap:10px;align-items:center;border:1px solid var(--rule);border-radius:4px;padding:10px 12px;min-width:0;font:500 14.5px/1.35 var(--f-display)}
+.ft{font:500 10.5px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--rule);border-radius:3px;padding:3px 5px;flex:none}
+.files .nm{min-width:0;overflow-wrap:anywhere;flex:1}
+.files .nm small{display:block;font:400 12.5px var(--f-display);color:var(--muted)}
+.files .nolink{font:400 11.5px var(--f-mono);color:var(--draft);border:1px dashed var(--draft);border-radius:3px;padding:3px 6px;flex:none}
+.callout{background:var(--accent-soft);border-radius:4px;padding:14px 16px;margin-top:14px;font-size:16.5px}
+.callout b{display:block;font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.todo{border:1.5px dashed var(--rule);border-radius:4px;padding:14px 16px;margin-top:14px}
+.todo .chip{margin-bottom:8px}
+.todo h3{font:600 16.5px var(--f-display);margin:0 0 4px}
+.todo p{margin:0;color:var(--muted);font-size:15.5px}
+.todo ul{margin-top:8px}
+.todogrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:14px}
+.todogrid .todo{margin-top:0}
+.tablewrap{overflow-x:auto;margin-top:12px}
+table{border-collapse:collapse;width:100%;font:400 15px/1.4 var(--f-display)}
+th{font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--rule);white-space:nowrap}
+td{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+td .add{color:var(--draft);font:400 12px var(--f-mono)}
+.rhythm{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:22px 20px;margin-top:20px}
+.rhythm h2{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+.rhythm .ri{display:block;padding:9px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink);font:500 15px/1.3 var(--f-display)}
+.rhythm .ri:hover{color:var(--accent)}
+.rhythm .ri small{display:block;font:400 13px var(--f-display);color:var(--muted);margin-top:2px}
+.rhythm .ri .chip{margin-top:6px}
+.rhythm .none{font:400 14px var(--f-display);color:var(--muted);margin:0}
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:30px;padding-top:18px;border-top:1px solid var(--rule)}
+.pager a{display:block;text-decoration:none;color:var(--ink);padding:10px 12px;border:1px solid var(--rule);border-radius:4px;font:600 15px/1.3 var(--f-display);min-width:0}
+.pager a:hover{background:var(--accent-soft)}
+.pager a small{display:block;font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.pager .next{text-align:right;grid-column:2}
+.folio{text-align:center;font:400 13px var(--f-mono);color:var(--muted);margin-top:18px}
+.flash{animation:flash 1.8s ease-out}
+@keyframes flash{from{background:var(--accent-soft)}to{background:transparent}}
+@media (prefers-reduced-motion:reduce){.flash{animation:none}}
+
+/* search results */
+.results{max-width:800px}
+.results .head{font:600 18px/1.3 var(--f-display);margin:0 0 4px}
+.results .also{font:400 14px var(--f-display);color:var(--muted);margin:0 0 14px}
+.hit{display:block;text-decoration:none;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;margin-bottom:10px}
+.hit:hover{border-color:var(--accent)}
+.hit .where{font:500 11.5px var(--f-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.hit .ttl{font:600 17px/1.3 var(--f-display);margin:3px 0 4px}
+.hit p{margin:0;font-size:15.5px;color:var(--ink)}
+mark{background:var(--mark);color:var(--ink);border-radius:2px;padding:0 1px}
+.empty{background:var(--paper);border:1px dashed var(--rule);border-radius:4px;padding:18px 16px}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#start" id="brand"><b>Reporting handover</b><span>Draft structure, content in progress</span></a>
+    <div class="search"><input id="q" type="search" autocomplete="off" aria-label="Search the handover" placeholder="Search, e.g. “late report” or “overtime hours”"></div>
+    <button class="tocbtn" id="tocbtn" type="button" aria-expanded="false" aria-controls="toc">Contents</button>
+  </header>
+  <div class="shell">
+    <nav class="toc" id="toc" aria-label="Contents"></nav>
+    <main id="main" tabindex="-1"></main>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ==========================================================================
+   EDIT HERE. Everything on the page is built from this list.
+   status: active | handed | reference | draft
+   cadence keys: mon tue wed thu fri month req tbc
+   files: link is empty until you add the SharePoint address.
+   reviewed: type a date such as '03 Nov 2026' once the chapter has been checked.
+   ========================================================================== */
+const CHAPTERS=[
+{id:'power-bi',title:'Power BI Projection Update',status:'draft',when:'To confirm',slot:'',cadence:['tbc'],reviewed:'',
+ tags:['dashboard','power bi','projection','report'],intro:'',
+ prompts:['What the projection shows and who uses it','Where the data refreshes from','How to update it each time','Who to ask if it breaks'],
+ sections:[],files:[],notes:[],contacts:[]},
+
+{id:'monthly-packs',title:'Monthly Packs',status:'draft',when:'Monthly',slot:'',cadence:['month'],reviewed:'',
+ tags:['month end','monthly','packs','reports'],intro:'',
+ prompts:['Which packs are produced each month','Deadline and who receives each one','Where the templates and last month’s versions live'],
+ sections:[],files:[],notes:[],contacts:[]},
+
+{id:'finance-figures',title:'M&S Finance Figures',status:'active',when:'Monday, before 9am',slot:'Due before 9am',cadence:['mon'],reviewed:'',
+ tags:['hours','labour','flex','overtime','budget','balance','deadline','late','money'],
+ intro:'Weekly finance figures. They must be saved to the weekly finance figures folder and also sent separately by email before 9am on Monday.',
+ sections:[
+  {h:'Hours vs Flex tab',kind:'checks',items:[
+   'No major overspends vs budget',
+   'Well-managed stranded labour hours have been reported',
+   'The new picking prods have been hit (check for w/c 16/08, not this week)',
+   'Stock tasks line does not exceed 66 hours per day (check for w/c 16/08, not this week)']},
+  {h:'Finance tab',kind:'checks',items:[
+   'Overtime hours, if any are used, are recorded in the overtime hours column',
+   'All hours balance back (the table at the bottom of the finance tab should all be true)']},
+  {h:'Saving and sending',kind:'steps',items:[
+   'Save the file into the weekly finance figures folder',
+   'Also send it separately by email before 9am on Monday']}],
+ files:[{name:'Weekly finance figures folder',type:'folder',link:''}],
+ notes:[],
+ contacts:[{name:'Simona',why:'Can help with any questions on balancing hours on the finance tab'}]},
+
+{id:'weekly-finance-call',title:'M&S Weekly Finance',status:'active',when:'Monday, 12:00 call',slot:'12:00 call',cadence:['mon'],reviewed:'',
+ tags:['call','meeting','volume','reporting','hours missed','commentary'],
+ intro:'Weekly finance call with M&S.',
+ sections:[{h:'On the call',kind:'bullets',items:[
+   'Join to ensure the volume reporting is accurate',
+   'Provide commentary on any hours missed']}],
+ files:[],notes:[],contacts:[]},
+
+{id:'std-e2e',title:'STD Shipped E2E Slide',status:'active',when:'Weekly, after the Sunday email',slot:'After the Sunday email',cadence:['tbc'],reviewed:'',
+ tags:['std','e2e','shipped','service','capacity','slide','data sheet','weekly'],
+ intro:'Three files are updated in order: the data sheet, the visual file, then the slide.',
+ sections:[
+  {h:'1. Update the data sheet',kind:'steps',items:[
+   'Find Justin’s STD shipped email from Sunday (the full week) and open the attachment',
+   'Open the data sheet, 16-08.xlsx',
+   'Copy the full previous week and paste it into the first blank column to add a new week',
+   'Delete all the manual inputs',
+   'Paste the data from Justin’s email into the relevant spots']},
+  {h:'2. Update the visual file',kind:'steps',items:[
+   'Open STD Service Vs Cap E2E.xlsx (it holds a tab for each week)',
+   'Copy the most recent week’s tab, create a new one and rename it for the previous week',
+   'Adjust the date range',
+   'The formulas pull through the new information from the data sheet']},
+  {h:'3. Build the slide',kind:'steps',items:[
+   'Open the E2E slide template, E2E WK 19.pptx, and populate it with commentary']}],
+ files:[{name:'16-08.xlsx',type:'xlsx',note:'Data sheet',link:''},
+        {name:'STD Service Vs Cap E2E.xlsx',type:'xlsx',note:'Visual file, one tab per week',link:''},
+        {name:'E2E WK 19.pptx',type:'pptx',note:'Slide template',link:''}],
+ notes:[],
+ contacts:[{name:'Justin',why:'Sends the STD shipped email on Sundays'}]},
+
+{id:'peak-review',title:'M&S PIR Peak Review',status:'active',when:'Monday and Tuesday',slot:'Slides for the peak call',cadence:['mon','tue'],reviewed:'',
+ tags:['pir','peak','action log','slides','call','weekly'],
+ intro:'The slides in the main body are updated weekly on Monday or Tuesday, ready for the peak call.',
+ sections:[],
+ files:[{name:'TC, OL & SB - Peak 2026.pptx',type:'pptx',note:'Peak review slides',link:''},
+        {name:'All Sites Peak Actions.xlsx',type:'xlsx',note:'Action log',link:''}],
+ notes:['If access is needed, both files belong to Ben Smith.'],
+ contacts:[{name:'Ben Smith',why:'Owns the peak review slides and the action log'}]},
+
+{id:'hannah-peak',title:'Hannah Myles Peak Slides',status:'handed',when:'End of every month',slot:'Actions and risks slides',cadence:['month'],reviewed:'',
+ tags:['peak','actions','risks','slides','monthly','month end'],
+ intro:'At the end of every month, Hannah requests the actions and risks slides to be updated and shared.',
+ sections:[],
+ files:[{name:'Hannah Peak Slides 2209.pptx',type:'pptx',note:'Template',link:''}],
+ notes:['The operation has picked this up. Because the peak slides are updated weekly for TC, SB and OL, Ben has been sharing the SB detail with Hannah from the action log. I usually check it has been sent each month.'],
+ contacts:[{name:'Hannah Myles',why:'Requests the monthly actions and risks slides'},
+           {name:'Ben Smith',why:'Shares the SB detail with Hannah from the action log'}]},
+
+{id:'cc-forecast',title:'C&C Volume Forecast',status:'reference',when:'On request',slot:'If Ethan or Bea ask',cadence:['req'],reviewed:'',
+ tags:['c&c','forecast','mrf','trailer','parcels','cage','volume','test volume'],
+ intro:'Not shared with the customer. It was mainly used to forecast the test volume.',
+ sections:[
+  {h:'Before use',kind:'steps',items:['Make sure the latest MRF is dropped into the MRF/Weekly tab']},
+  {h:'What the file holds',kind:'bullets',items:[
+   'The C&C volume forecast, based on the latest forecast and MRF splits, plus the hourly drop-in profiles',
+   'A trailer plan based on an input of parcels per cage, which projects any failed parcels']}],
+ files:[{name:'C&C Profile.xlsx',type:'xlsx',link:''}],
+ notes:['Ethan also asks for it when volume from the TC side needs confirming. There is no recurring touch point. It is left here as a reference in case Ethan or Bea request it.'],
+ contacts:[{name:'Ethan',why:'Requests the volume when TC volume needs confirming'},
+           {name:'Bea',why:'May request the C&C forecast'}]},
+
+{id:'carrier-forecast',title:'Carrier Forecast',status:'reference',when:'On request',slot:'If Sam P asks',cadence:['req'],reviewed:'',
+ tags:['carrier','courier','forecast','sod','outdated','refresh'],
+ intro:'Currently a tab on the M&S SOD. It is outdated because the couriers have changed, and will need a refresh if Sam P requests it.',
+ sections:[],files:[],notes:[],
+ contacts:[{name:'Sam P',why:'May request a refresh of the carrier forecast'}]},
+
+{id:'planning-review',title:'M&S Weekly Planning Review Pack',status:'active',when:'Weekly',slot:'Six-slide pack',cadence:['tbc'],reviewed:'',
+ tags:['planning','review','flow plan','mrf','recruitment','prop model','stockholding','carrier capacities','pack','slides','weekly','rtv','ash','overtime'],
+ intro:'Updated in the planning model first, then carried onto six slides.',
+ sections:[
+  {h:'Before the slides: update the planning model',kind:'steps',items:[
+   'Update the flow plan in the planning model',
+   'Make sure the lines match up (some have changed since the template was created)',
+   'Copy the most recent publish at the top into the previous publish section, again checking the lines match (part copy and paste is needed)',
+   'Hide the previous week in the weekly summary']},
+  {h:'Slide 1: Flow Plan, Variances to Previous Forecast',kind:'bullets',items:[
+   'Use the weekly summary variance to previous forecast, flow plan variance to locks and flow plan variance to MRF tables in the planning model',
+   'For flow plan variance to locks and to MRF, copy and paste the last column to extend by one week each update',
+   'Add relevant commentary on the slide']},
+  {h:'Slide 2: Mid-Term Plan',kind:'bullets',items:[
+   'Use the planned volume section of the weekly summary',
+   {t:'Make sure there is no roll on Outbound, using these methods:',sub:[
+     'Adjust RTV weeks (make sure the total matches back to the flow plan)',
+     'Add overtime or adjust ASH in the recruitment plan',
+     'Add support hours at the bottom of the outbound tab to increase the cap']},
+   'Add any adjustments as comments. They pull through automatically into the next slide (People)']},
+  {h:'Slide 3: Resource Impact',kind:'bullets',items:[
+   'Copy and paste the recruitment graph from the visual tab of the planning model',
+   'Adjust the call-outs that overlay the graph to add commentary',
+   'Update the commentary above to the total recruitment']},
+  {h:'Slide 4: ECOM View, Prop Model',kind:'bullets',items:[
+   'Open the prop model tab on the planning model',
+   'Make sure the shortage on the far right does not exceed 1k on an individual day',
+   'Add in any moves required, and make sure the cap exceeds the drop-in over the extended period']},
+  {h:'Slide 5: Stockholding Projections',kind:'bullets',items:[
+   'The graph does not need to change, because it is based on MRFs',
+   'Update the tables using the stocks space tracker']},
+  {h:'Slide 6: Carrier Capacities',kind:'bullets',items:[
+   'This section needs to be revised once the new carrier plans (C&C etc.) are implemented']}],
+ files:[{name:'Weekly Planning Review',type:'folder',note:'Folder with the templates',link:''},
+        {name:"SPACE TRACKING' MARKS AND SPENCER 2026 V1.xlsx",type:'xlsx',note:'Stocks space tracker',link:''}],
+ notes:[],contacts:[]},
+
+{id:'brands-pva',title:'Brands PVA',status:'handed',when:'Weekly',slot:'Handed to the operation',cadence:['tbc'],reviewed:'',
+ tags:['brands','pva','sherburn','site summary','compliance','h&s','bookings','report'],
+ intro:'Handed over to the operation. The steps are kept here for reference.',
+ sections:[{h:'Steps',kind:'steps',items:[
+   'Paste the daily report into the Sherburn tab, and fill in the table at the top right with the compliance and H&S information',
+   'Add the usual comments into each section (check previous weeks’ files)',
+   'On the internal call, check bookings and run through the report. After any changes, paste the report in again',
+   'There is no need to share it. TC share the combined file']}],
+ files:[{name:'M&S Weekly Site Summary.xlsx',type:'xlsx',note:'New format',link:''}],
+ notes:[],contacts:[]},
+
+{id:'doncaster',title:'Doncaster Planning Model Update',status:'active',when:'Friday, when the roller is sent',slot:'When the roller is sent',cadence:['fri'],reviewed:'',
+ tags:['doncaster','planning model','roller','daily profile','inbound','outbound','ib','ob','weekly summary'],
+ intro:'Updated on Friday once the roller has been sent.',
+ sections:[{h:'Steps',kind:'steps',items:[
+   'Hardcode the previous weeks in the weekly summary, and the daily profile in the IB and OB tabs',
+   'Update the roller tab with week numbers and volume on the Doncaster sections',
+   'The daily profile is on the bottom row of the daily view on the roller tab. Make sure it covers the full range, then update it in the daily IB and OB tabs']}],
+ files:[],notes:[],contacts:[]},
+
+{id:'share-caps',title:'Share Caps with M&S',status:'active',when:'Tuesday',slot:'From the Outbound tab',cadence:['tue'],reviewed:'',
+ tags:['caps','capacity','outbound','master list lite','inbound','volumes','share','send'],
+ intro:'Share with M&S on Tuesday from the Outbound tab of the planning model. It updates automatically from Master List Lite and the IB volumes.',
+ sections:[],files:[],notes:[],contacts:[]}
+];
+
+const FRONT=[{id:'start',title:'Start here'},{id:'rhythm',title:'Weekly rhythm'},{id:'people',title:'Who’s who'}];
+const BACK=[{id:'files',title:'Files and links'},{id:'troubleshooting',title:'If something goes wrong'},{id:'glossary',title:'Glossary'},{id:'faq',title:'Questions and answers'}];
+const GLOSSARY=['MRF','E2E','STD','PIR','TC','SB','OL','C&C','PVA','RTV','ASH','IB','OB','SOD','H&S','ECOM','Flow plan','Locks','Roller','Prop model','Stranded labour hours','Master List Lite'];
+
+/* ===== end of editable content ===== */
+
+const STATUS={active:{label:'Active',cls:'s-active'},handed:{label:'Handed over',cls:'s-handed'},reference:{label:'Reference only',cls:'s-ref'},draft:{label:'To write',cls:'s-draft'}};
+const COLS=[['mon','Monday'],['tue','Tuesday'],['wed','Wednesday'],['thu','Thursday'],['fri','Friday'],['month','Monthly'],['req','On request'],['tbc','Day to confirm']];
+const TYPE={xlsx:'XLSX',pptx:'PPTX',folder:'Folder',docx:'DOCX',pdf:'PDF'};
+const SYN={late:['deadline','due','before 9am','missed'],deadline:['late','due','before 9am'],report:['pack','slide','summary'],pack:['report','slide','review'],
+ slide:['deck','pptx','presentation','pack'],deck:['slide','pptx','presentation'],presentation:['slide','pptx','deck'],
+ hour:['labour','overtime','flex'],labour:['hours','overtime','flex'],overtime:['hours','labour','ash'],budget:['finance','overspend'],money:['finance','budget'],
+ forecast:['mrf','volume','flow plan','projection'],volume:['forecast','mrf','profile'],call:['meeting','12:00'],meeting:['call'],
+ courier:['carrier'],carrier:['courier','capacity'],template:['pptx','xlsx','folder'],spreadsheet:['xlsx','excel'],excel:['xlsx'],powerpoint:['pptx'],
+ contact:['who','owner','simona','justin','ben smith','hannah','ethan','bea','sam p'],help:['contact','questions'],who:['contact','owner'],
+ email:['send','share'],send:['share','email'],share:['send','email'],stock:['stockholding','space','stocks'],
+ weekly:['every week','monday','tuesday','friday'],monthly:['end of every month','month'],friday:['roller','doncaster'],
+ capacity:['cap','carrier'],cap:['capacity','outbound'],peak:['pir','action log'],action:['action log','risks'],risk:['actions','risks'],
+ recruitment:['ash','hiring'],finance:['hours','budget','overtime']};
+const STOP=new Set(['the','a','an','of','to','is','are','do','does','how','what','when','where','who','i','my','for','and','in','on','it','we','can','me','should','with','this','that','at','or']);
+
+const $=(s,r)=>(r||document).querySelector(s);
+const $$=(s,r)=>Array.from((r||document).querySelectorAll(s));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const stem=t=>t.length>3&&t.endsWith('s')?t.slice(0,-1):t;
+
+let ticks={};
+try{ticks=JSON.parse(localStorage.getItem('rh-ticks')||'{}')||{}}catch(e){ticks={}}
+const saveTicks=()=>{try{localStorage.setItem('rh-ticks',JSON.stringify(ticks))}catch(e){}};
+
+const PAGES=[].concat(FRONT.map(p=>({id:p.id,title:p.title,kind:'front'})),
+  CHAPTERS.map(c=>({id:c.id,title:c.title,kind:'chapter',ch:c})),
+  BACK.map(p=>({id:p.id,title:p.title,kind:'back'})));
+const byId=id=>PAGES.find(p=>p.id===id);
+const chip=st=>`<span class="chip ${STATUS[st].cls}">${STATUS[st].label}</span>`;
+const itemText=it=>typeof it==='string'?it:it.t+' '+(it.sub||[]).join(' ');
+const li=it=>typeof it==='string'?esc(it):esc(it.t)+(it.sub?'<ul>'+it.sub.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ul>':'');
+
+/* ---------- contents ---------- */
+function buildToc(){
+  const row=p=>{
+    let n='',dot='';
+    if(p.kind==='chapter'){n=String(CHAPTERS.indexOf(p.ch)+1);dot=`<span class="dot d-${p.ch.status}" title="${STATUS[p.ch.status].label}"></span>`}
+    return `<a href="#${p.id}" data-id="${p.id}"><span class="n">${n}</span><span>${esc(p.title)}</span>${dot||'<span></span>'}</a>`;
+  };
+  $('#toc').innerHTML='<h2>Front</h2>'+PAGES.filter(p=>p.kind==='front').map(row).join('')+
+    '<h2>Chapters</h2>'+PAGES.filter(p=>p.kind==='chapter').map(row).join('')+
+    '<h2>Back</h2>'+PAGES.filter(p=>p.kind==='back').map(row).join('')+
+    '<div class="legend" aria-label="Status key">'+Object.keys(STATUS).map(k=>`<span><i class="dot d-${k}"></i>${STATUS[k].label}</span>`).join('')+'</div>';
+}
+
+/* ---------- page pieces ---------- */
+function shell(run,inner,id,folio){
+  const i=PAGES.findIndex(p=>p.id===id),prev=PAGES[i-1],next=PAGES[i+1];
+  const pager='<nav class="pager" aria-label="Previous and next page">'+
+    (prev?`<a class="prev" href="#${prev.id}"><small>Previous</small>${esc(prev.title)}</a>`:'<span></span>')+
+    (next?`<a class="next" href="#${next.id}"><small>Next</small>${esc(next.title)}</a>`:'')+'</nav>';
+  return `<article class="page"><div class="runhead"><span>Reporting handover</span><span>${esc(run)}</span></div>${inner}${pager}${folio?`<div class="folio">${folio}</div>`:''}</article>`;
+}
+function todo(title,text,list){
+  return `<div class="todo"><span class="chip s-draft">To add</span><h3>${esc(title)}</h3>${text?`<p>${esc(text)}</p>`:''}${list?'<ul>'+list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':''}</div>`;
+}
+function section(c,s,si){
+  const key=c.id+'-'+si;let body;
+  if(s.kind==='checks'){
+    body='<ul class="checks">'+s.items.map((it,i)=>{const k=key+'-'+i;
+      return `<li><label><input type="checkbox" data-tick="${k}"${ticks[k]?' checked':''}><span>${li(it)}</span></label></li>`}).join('')+'</ul>';
+  }else if(s.kind==='steps'){
+    body='<ol class="steps">'+s.items.map(it=>`<li>${li(it)}</li>`).join('')+'</ol>';
+  }else{
+    body='<ul class="list">'+s.items.map(it=>`<li>${li(it)}</li>`).join('')+'</ul>';
+  }
+  return `<section class="sec" id="sec-${si}"><h2>${esc(s.h)}</h2>${s.note?`<p class="secnote">${esc(s.note)}</p>`:''}${body}</section>`;
+}
+function fileList(files){
+  return '<ul class="files">'+files.map(f=>{
+    const nm=`<span class="nm">${esc(f.name)}${f.note?`<small>${esc(f.note)}</small>`:''}</span>`;
+    const t=`<span class="ft">${esc(TYPE[f.type]||f.type)}</span>`;
+    return f.link?`<li>${t}<a class="nm" href="${esc(f.link)}" target="_blank" rel="noopener">${esc(f.name)}${f.note?`<small>${esc(f.note)}</small>`:''}</a></li>`
+                 :`<li>${t}${nm}<span class="nolink">link to add</span></li>`}).join('')+'</ul>';
+}
+
+/* ---------- page renderers ---------- */
+function chapterPage(c){
+  const n=CHAPTERS.indexOf(c)+1;
+  const contacts=(c.contacts||[]).map(x=>`${esc(x.name)}<small>${esc(x.why)}</small>`).join('<br>')||'<small>None listed</small>';
+  let h=`<h1>${esc(c.title)}</h1>
+   <dl class="meta"><div><dt>When</dt><dd>${esc(c.when)}</dd></div><div><dt>Status</dt><dd>${chip(c.status)}</dd></div>
+   <div><dt>Last reviewed</dt><dd>${c.reviewed?esc(c.reviewed):'<small>Not set</small>'}</dd></div>
+   <div><dt>Contacts</dt><dd>${contacts}</dd></div></dl>`;
+  if(c.intro)h+=`<p class="intro">${esc(c.intro)}</p>`;
+  if(c.status==='draft')h+=todo('This chapter is not written yet','Suggested headings to cover:',c.prompts);
+  (c.sections||[]).forEach((s,i)=>{h+=section(c,s,i)});
+  if((c.sections||[]).some(s=>s.kind==='checks'))h+='<div class="tickbar"><span>Ticks are saved on this device only.</span><button type="button" class="linkbtn" data-clear="'+c.id+'">Clear ticks</button></div>';
+  if(c.notes&&c.notes.length)h+=c.notes.map(t=>`<div class="callout"><b>Note</b>${esc(t)}</div>`).join('');
+  if(c.files&&c.files.length)h+=`<div class="block"><h2>Files used</h2>${fileList(c.files)}</div>`;
+  return shell('Chapter '+n+' of '+CHAPTERS.length,h,c.id,String(n));
+}
+function startPage(){
+  const files=[].concat.apply([],CHAPTERS.map(c=>c.files||[]));
+  const written=CHAPTERS.filter(c=>c.status!=='draft');
+  const linked=files.filter(f=>f.link).length,reviewed=written.filter(c=>c.reviewed).length;
+  const drafts=CHAPTERS.filter(c=>c.status==='draft');
+  const h=`<h1>Start here</h1>
+   <p class="intro">Everything needed to keep the weekly and monthly reporting running, in one place. Use the contents on the left, or search for a task, a file or a person.</p>
+   <div class="todogrid">
+    ${todo('Purpose and scope','Why this book exists and what it covers.')}
+    ${todo('Leaving date and cover','Last working day, and who covers until the handover is complete.')}
+    ${todo('Who to contact first','The one person to ask when something here is unclear.')}
+    ${todo('What goes wrong most often','The two or three problems the team is most likely to hit.')}
+   </div>
+   <div class="block"><h2>Handover progress</h2>
+    <div class="tablewrap"><table><thead><tr><th>Item</th><th>Done</th></tr></thead><tbody>
+     <tr><td>Chapters written</td><td>${written.length} of ${CHAPTERS.length}</td></tr>
+     <tr><td>Files with a link</td><td>${linked} of ${files.length}</td></tr>
+     <tr><td>Chapters with a review date</td><td>${reviewed} of ${written.length}</td></tr>
+    </tbody></table></div>
+    ${drafts.length?'<p class="secnote" style="margin-top:12px">Still to write: '+drafts.map(d=>`<a href="#${d.id}">${esc(d.title)}</a>`).join(', ')+'.</p>':''}
+   </div>`;
+  return shell('Front matter',h,'start','');
+}
+function rhythmPage(){
+  const cols=COLS.map(([k,label])=>{
+    const list=CHAPTERS.filter(c=>c.cadence.includes(k));
+    let body;
+    if(!list.length)body=k==='wed'||k==='thu'?'<p class="none">Nothing logged yet</p>':'<p class="none">Nothing</p>';
+    else body=list.map(c=>`<a class="ri" href="#${c.id}">${esc(c.title)}${c.slot?`<small>${esc(c.slot)}</small>`:''}${c.status!=='active'?chip(c.status):''}</a>`).join('');
+    return `<div><h2>${label}</h2>${body}</div>`;
+  }).join('');
+  const h=`<h1>Weekly rhythm</h1><p class="intro">What lands when. Each item opens its chapter. Items under “Day to confirm” have no day in the notes yet.</p><div class="rhythm">${cols}</div>`;
+  return shell('Front matter',h,'rhythm','');
+}
+function peoplePage(){
+  const map={};
+  CHAPTERS.forEach(c=>(c.contacts||[]).forEach(x=>{(map[x.name]=map[x.name]||[]).push({why:x.why,c})}));
+  const rows=Object.keys(map).map(name=>`<tr><td><b>${esc(name)}</b></td><td>${map[name].map(m=>esc(m.why)).join('<br>')}</td>
+    <td>${map[name].map(m=>`<a href="#${m.c.id}">${esc(m.c.title)}</a>`).join('<br>')}</td><td><span class="add">add Teams or email</span></td></tr>`).join('');
+  const h=`<h1>Who’s who</h1><p class="intro">People named in the chapters. Add how to reach each one.</p>
+   <div class="tablewrap"><table><thead><tr><th>Name</th><th>Why they matter</th><th>Chapter</th><th>Contact</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  return shell('Front matter',h,'people','');
+}
+function filesPage(){
+  const rows=[];
+  CHAPTERS.forEach(c=>(c.files||[]).forEach(f=>rows.push(`<tr><td><span class="ft">${esc(TYPE[f.type]||f.type)}</span></td><td>${f.link?`<a href="${esc(f.link)}" target="_blank" rel="noopener">${esc(f.name)}</a>`:esc(f.name)}${f.note?`<br><small style="color:var(--muted)">${esc(f.note)}</small>`:''}</td>
+    <td><a href="#${c.id}">${esc(c.title)}</a></td><td>${f.link?'Linked':'<span class="add">link to add</span>'}</td></tr>`)));
+  const h=`<h1>Files and links</h1><p class="intro">Every file named in the chapters, collected in one list.</p>
+   <div class="tablewrap"><table><thead><tr><th>Type</th><th>File</th><th>Used in</th><th>Link</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
+  return shell('Back matter',h,'files','');
+}
+function troublePage(){
+  const h=`<h1>If something goes wrong</h1><p class="intro">Short fixes for the problems the team is most likely to hit. Each entry says what you see, what to check and who to ask.</p>
+   ${todo('Problem 1','What you see, what to check, who to ask.')}${todo('Problem 2','What you see, what to check, who to ask.')}${todo('Problem 3','What you see, what to check, who to ask.')}`;
+  return shell('Back matter',h,'troubleshooting','');
+}
+function glossaryPage(){
+  const rows=GLOSSARY.map(t=>`<tr><td><b>${esc(t)}</b></td><td><span class="add">definition to add</span></td></tr>`).join('');
+  const h=`<h1>Glossary</h1><p class="intro">Terms that appear in the chapters. Add a plain definition for anyone new to the work.</p>
+   <div class="tablewrap"><table><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  return shell('Back matter',h,'glossary','');
+}
+function faqPage(){
+  const h=`<h1>Questions and answers</h1><p class="intro">Questions the team has asked over time, with short answers and a link to the chapter.</p>
+   ${todo('Question 1','Answer in one or two sentences, with a link to the chapter.')}${todo('Question 2','Answer in one or two sentences, with a link to the chapter.')}`;
+  return shell('Back matter',h,'faq','');
+}
+const RENDER={start:startPage,rhythm:rhythmPage,people:peoplePage,files:filesPage,troubleshooting:troublePage,glossary:glossaryPage,faq:faqPage};
+
+/* ---------- show and route ---------- */
+const main=$('#main'),q=$('#q');
+let current='start',pendingSec=null;
+function show(id,sec){
+  const p=byId(id)||byId('start');current=p.id;
+  main.innerHTML=p.kind==='chapter'?chapterPage(p.ch):RENDER[p.id]();
+  $$('#toc a').forEach(a=>{a.getAttribute('data-id')===p.id?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current')});
+  main.focus({preventScroll:true});
+  const el=sec!=null&&sec>=0?$('#sec-'+sec):null;
+  if(el){el.scrollIntoView();el.classList.add('flash')}else window.scrollTo(0,0);
+}
+function closeToc(){$('#toc').classList.remove('open');$('#tocbtn').setAttribute('aria-expanded','false')}
+function goTo(id,sec){
+  q.value='';closeToc();
+  if(location.hash==='#'+id){show(id,sec)}else{pendingSec=sec==null?null:sec;location.hash=id}
+}
+function route(){
+  const id=decodeURIComponent(location.hash.slice(1));
+  q.value='';closeToc();
+  const s=pendingSec;pendingSec=null;
+  show(byId(id)?id:'start',s);
+}
+window.addEventListener('hashchange',route);
+
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href^="#"]');
+  if(a&&!a.hasAttribute('data-nolink')){
+    const id=a.getAttribute('href').slice(1);
+    if(byId(id)){e.preventDefault();goTo(id,a.dataset.sec!=null?parseInt(a.dataset.sec,10):null)}
+  }
+  const clr=e.target.closest('[data-clear]');
+  if(clr){
+    const id=clr.getAttribute('data-clear');
+    Object.keys(ticks).forEach(k=>{if(k.indexOf(id+'-')===0)delete ticks[k]});saveTicks();
+    $$('input[data-tick]',main).forEach(i=>{i.checked=false});
+  }
+});
+main.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.matches&&t.matches('input[data-tick]')){if(t.checked)ticks[t.dataset.tick]=1;else delete ticks[t.dataset.tick];saveTicks()}
+});
+$('#tocbtn').addEventListener('click',()=>{
+  const t=$('#toc'),open=!t.classList.contains('open');t.classList.toggle('open',open);$('#tocbtn').setAttribute('aria-expanded',String(open));
+});
+
+/* ---------- search ---------- */
+const INDEX=[];
+CHAPTERS.forEach(c=>{
+  INDEX.push({c,sec:-1,title:c.title,heading:'',tags:(c.tags||[]).join(' '),
+    body:[c.when,c.intro,(c.notes||[]).join(' '),(c.contacts||[]).map(x=>x.name+' '+x.why).join(' '),(c.files||[]).map(f=>f.name+' '+(f.note||'')).join(' '),STATUS[c.status].label].join(' '),
+    lines:[c.intro].concat(c.notes||[],[c.when]).filter(Boolean)});
+  (c.sections||[]).forEach((s,si)=>INDEX.push({c,sec:si,title:c.title,heading:s.h,tags:'',body:s.items.map(itemText).join(' '),lines:s.items.map(itemText)}));
+});
+function groupsFor(text){
+  const terms=text.toLowerCase().replace(/[“”"']/g,' ').split(/\s+/).filter(t=>t&&!STOP.has(t)&&t.length>1);
+  return terms.map(t=>{const s=stem(t);const syn=SYN[t]||SYN[s]||[];return Array.from(new Set([s].concat(syn)))});
+}
+function scoreEntry(e,groups){
+  const T=e.title.toLowerCase(),H=e.heading.toLowerCase(),G=e.tags.toLowerCase(),B=e.body.toLowerCase();
+  let matched=0,total=0;
+  groups.forEach(g=>{
+    let best=0;
+    g.forEach((v,i)=>{const m=i===0?1:.5;let s=0;
+      if(T.includes(v))s=Math.max(s,5*m);if(H.includes(v))s=Math.max(s,3*m);if(G.includes(v))s=Math.max(s,4*m);if(B.includes(v))s=Math.max(s,m);
+      best=Math.max(best,s)});
+    if(best>0){matched++;total+=best}
+  });
+  return {matched,total};
+}
+function hl(text,variants){
+  const vs=variants.slice().sort((a,b)=>b.length-a.length).map(v=>v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+  if(!vs.length)return esc(text);
+  return text.split(new RegExp('('+vs.join('|')+')','gi')).map((p,i)=>i%2?'<mark>'+esc(p)+'</mark>':esc(p)).join('');
+}
+function snippet(e,variants){
+  const low=variants.map(v=>v.toLowerCase());
+  let line=e.lines.find(l=>low.some(v=>l.toLowerCase().includes(v)))||e.lines[0]||'';
+  if(line.length>180){
+    const idx=Math.max(0,Math.min(...low.map(v=>line.toLowerCase().indexOf(v)).filter(i=>i>=0).concat([0]))-50);
+    line=(idx>0?'…':'')+line.slice(idx,idx+180)+'…';
+  }
+  return line;
+}
+function renderSearch(text){
+  const groups=groupsFor(text);
+  if(!groups.length){show(current);return}
+  const scored=INDEX.map(e=>Object.assign({e},scoreEntry(e,groups))).filter(r=>r.matched>0);
+  const best=scored.reduce((m,r)=>Math.max(m,r.matched),0);
+  const hits=scored.filter(r=>r.matched===best).sort((a,b)=>b.total-a.total).slice(0,14);
+  const all=[].concat.apply([],groups);
+  const extra=[];groups.forEach(g=>g.slice(1).forEach(v=>{if(extra.indexOf(v)<0)extra.push(v)}));
+  let h='<div class="results">';
+  if(!hits.length){
+    h+=`<div class="empty"><p class="head">Nothing in the handover matches “${esc(text)}”</p><p class="also" style="margin:6px 0 0">Try a different word. If this topic matters, it is a gap to add to the book.</p></div>`;
+  }else{
+    h+=`<p class="head">${hits.length} ${hits.length===1?'place':'places'} for “${esc(text)}”</p>`;
+    h+=`<p class="also">${extra.length?'Also looked for: '+esc(extra.slice(0,8).join(', '))+'.':'Showing the best matches.'}</p>`;
+    h+=hits.map(r=>{const e=r.e,n=CHAPTERS.indexOf(e.c)+1;
+      return `<a class="hit" href="#${e.c.id}" data-sec="${e.sec}"><div class="where">Chapter ${n}${e.heading?' · '+hl(e.heading,all):''}</div><div class="ttl">${hl(e.c.title,all)}</div><p>${hl(snippet(e,all),all)}</p></a>`}).join('');
+  }
+  main.innerHTML=h+'</div>';
+  window.scrollTo(0,0);
+}
+q.addEventListener('input',()=>{const v=q.value.trim();if(v)renderSearch(v);else show(current)});
+q.addEventListener('keydown',e=>{if(e.key==='Escape'){q.value='';show(current)}});
+
+buildToc();
+route();
+})();
+</script>
