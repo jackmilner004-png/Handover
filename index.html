@@ -147,7 +147,7 @@ td .add{color:var(--draft);font:400 12px var(--f-mono)}
 .field{display:grid;gap:6px;margin-top:16px;min-width:0}
 .field label,.field legend{font:600 13.5px var(--f-display)}
 .field .hint{font:400 13px/1.4 var(--f-display);color:var(--muted)}
-.field input[type=text],.field select,.field textarea,.inline input[type=text],.inline select{width:100%;font:400 16px/1.45 var(--f-display);color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:9px 11px;min-width:0}
+.field input[type=text],.field input[type=password],.field select,.field textarea,.inline input[type=text],.inline select{width:100%;font:400 16px/1.45 var(--f-display);color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:9px 11px;min-width:0}
 .field textarea{font:400 14.5px/1.5 var(--f-mono);resize:vertical;min-height:90px}
 .field textarea.tall{min-height:260px}
 .fieldrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 18px}
@@ -437,7 +437,11 @@ const stem=t=>t.length>3&&t.endsWith('s')?t.slice(0,-1):t;
 const clone=o=>JSON.parse(JSON.stringify(o));
 
 /* ---------- where edits live ---------- */
-let overrides={};          // page id -> {page?, order?, deleted?}
+let overrides={};          // this person's own edits: page id -> {page?, order?, deleted?}
+let published={};          // edits published to the repo (content.json), read on the GitHub copy
+const effective=()=>Object.assign({},published,overrides);
+let gh={repo:'jackmilner004-png/Handover',branch:'main',path:'content.json',token:'',remember:false};
+try{const s=JSON.parse(localStorage.getItem('rh-gh')||'null');if(s&&typeof s==='object'){gh=Object.assign(gh,s);gh.remember=!!s.token}}catch(e){}
 let db=null;
 const store={mode:'pending',slow:false,note:''};
 let ticks={};
@@ -469,15 +473,15 @@ function normPage(p,id,group){
 /* ---------- pages = starting content + edits ---------- */
 let PAGES=[];
 function computePages(){
-  const list=[];
+  const list=[],eff=effective();
   BASE.forEach(b=>{
-    const o=overrides[b.id]||{};if(o.deleted)return;
+    const o=eff[b.id]||{};if(o.deleted)return;
     let src=b;
     if(o.page){src=normPage(Object.assign({},b,o.page),b.id,b.group);if(b.auto)src.auto=b.auto;if(b.extra)src.extra=b.extra}
     list.push(Object.assign({},src,{order:typeof o.order==='number'?o.order:b.order}));
   });
-  Object.keys(overrides).forEach(id=>{
-    if(BASE_IDS[id])return;const o=overrides[id];if(!o||o.deleted||!o.page)return;
+  Object.keys(eff).forEach(id=>{
+    if(BASE_IDS[id])return;const o=eff[id];if(!o||o.deleted||!o.page)return;
     const g=GROUP_RANK[o.page.group]!=null?o.page.group:'chapter';
     list.push(Object.assign(normPage(o.page,id,g),{order:typeof o.order==='number'?o.order:9999}));
   });
@@ -491,7 +495,7 @@ const label=p=>p.group==='chapter'?'Chapter '+chNum(p):GROUP_LABEL[p.group];
 
 async function setOverride(id,patch){
   await storeReady;
-  const next=Object.assign({},overrides[id]||{});
+  const next=Object.assign({},effective()[id]||{});
   Object.keys(patch).forEach(k=>{if(patch[k]===undefined||patch[k]===null)delete next[k];else next[k]=patch[k]});
   if(next.deleted===false)delete next.deleted;
   const empty=!('page' in next)&&!('order' in next)&&!next.deleted;
@@ -699,7 +703,8 @@ function functionsPage(p){
     }).join('');
   };
   const removed=[];
-  Object.keys(overrides).forEach(id=>{const o=overrides[id];if(!o||!o.deleted)return;
+  const effAll=effective();
+  Object.keys(effAll).forEach(id=>{const o=effAll[id];if(!o||!o.deleted)return;
     const b=BASE.find(x=>x.id===id);const t=b?b.title:(o.page&&o.page.title);if(t)removed.push({id:id,title:t})});
   let h=`<h1>${esc(p.title)}</h1><p class="intro">Add pages, change their order and back up the content. To change what a page says, use the pencil icon at the top of that page.</p>${noticeHtml()}
    <p class="secnote">${esc(modeText+slow)}${store.note?' '+esc(store.note):''}</p>
@@ -710,12 +715,52 @@ function functionsPage(p){
    <section class="sec"><h2>Pages</h2><p class="secnote">Up and Down move a page within its group. Remove hides a page; it can be restored below.</p>
     <ul class="pl"><h3>Front</h3>${rows('front')}<h3>Chapters</h3>${rows('chapter')}<h3>Back</h3>${rows('back')}</ul></section>`;
   if(removed.length)h+=`<section class="sec"><h2>Removed pages</h2><ul class="pl">${removed.map(r=>`<li><span class="n"></span><span>${esc(r.title)}</span><span class="btns"><button type="button" class="btn small" data-act="restore" data-id="${esc(r.id)}">Restore</button></span></li>`).join('')}</ul></section>`;
+  if(store.mode==='device')h+=publishSection();
   h+=`<section class="sec backup"><h2>Backup</h2><p class="secnote">Every edit, order change and added page as text. Keep a copy somewhere safe, or paste one below to restore it.</p>
-    <div class="field"><label for="bk-out">Current edits</label><textarea id="bk-out" readonly>${esc(JSON.stringify(overrides,null,1))}</textarea></div>
+    <div class="field"><label for="bk-out">Current edits</label><textarea id="bk-out" readonly>${esc(JSON.stringify(effAll,null,1))}</textarea></div>
     <div class="actions" style="margin-top:12px;padding-top:0;border:0"><button type="button" class="btn" data-act="copy">Copy</button></div>
     <div class="field"><label for="bk-in">Restore from a copy</label><textarea id="bk-in" placeholder="Paste a copy here"></textarea></div>
     <div class="actions" style="margin-top:12px;padding-top:0;border:0"><button type="button" class="btn" data-act="import">Restore</button></div></section>`;
   return shell(p,h);
+}
+
+/* ---------- publish to GitHub (GitHub copy only) ---------- */
+function publishSection(){
+  const n=Object.keys(overrides).length;
+  return `<section class="sec"><h2>Publish to GitHub</h2>
+   <p class="secnote">${n?n+(n===1?' page has':' pages have')+' edits that only you can see on this device.':'You have no unpublished edits.'} Publishing saves them to the repository, so everyone who opens this page sees them within a minute or two.</p>
+   <div class="fieldrow"><div class="field"><label for="gh-repo">Repository</label><input id="gh-repo" type="text" value="${esc(gh.repo)}" placeholder="owner/name"></div>
+    <div class="field"><label for="gh-branch">Branch</label><input id="gh-branch" type="text" value="${esc(gh.branch)}"></div>
+    <div class="field"><label for="gh-path">Content file</label><input id="gh-path" type="text" value="${esc(gh.path)}"></div></div>
+   <div class="field"><label for="gh-token">GitHub token</label><input id="gh-token" type="password" autocomplete="off" value="${esc(gh.token)}">
+    <span class="hint">Create a fine-grained personal access token in your GitHub settings, limited to this one repository, with Contents set to Read and write. Anyone with the token can change the repository, so keep it private.</span></div>
+   <div class="cad" style="margin-top:12px"><label><input type="checkbox" id="gh-remember"${gh.remember?' checked':''}>Remember the token on this device</label></div>
+   <div class="actions" style="margin-top:14px;padding-top:0;border:0"><button type="button" class="btn primary" data-act="publish">Publish edits</button><button type="button" class="btn" data-act="gh-forget">Forget token</button></div></section>`;
+}
+const encodeB64=s=>{const b=new TextEncoder().encode(s);let bin='';b.forEach(x=>{bin+=String.fromCharCode(x)});return btoa(bin)};
+const decodeB64=s=>{const bin=atob(s.replace(/\s/g,''));return new TextDecoder().decode(Uint8Array.from(bin,c=>c.charCodeAt(0)))};
+async function publishToGitHub(btn){
+  const v=id=>($('#'+id)||{value:''}).value.trim();
+  gh.repo=v('gh-repo');gh.branch=v('gh-branch')||'main';gh.path=v('gh-path')||'content.json';gh.token=v('gh-token');gh.remember=!!($('#gh-remember')||{}).checked;
+  if(!/^[\w.-]+\/[\w.-]+$/.test(gh.repo)||!gh.token){say('Enter the repository as owner/name, and paste your token.',true);show(current,null,true);return}
+  if(!/^[\w./-]+$/.test(gh.path)||gh.path.indexOf('..')>=0){say('The content file name can only use letters, numbers, dots, dashes and slashes.',true);show(current,null,true);return}
+  try{localStorage.setItem('rh-gh',JSON.stringify({repo:gh.repo,branch:gh.branch,path:gh.path,token:gh.remember?gh.token:''}))}catch(e){}
+  if(btn){btn.disabled=true;btn.textContent='Publishing…'}
+  const url='https://api.github.com/repos/'+gh.repo+'/contents/'+gh.path.split('/').map(encodeURIComponent).join('/');
+  const hdr={'Authorization':'Bearer '+gh.token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+  const ok=await run(async()=>{
+    let sha,remote={};
+    let r=await fetch(url+'?ref='+encodeURIComponent(gh.branch),{headers:hdr});
+    if(r.status===200){const j=await r.json();sha=j.sha;try{const o=JSON.parse(decodeB64(j.content||''));if(o&&typeof o==='object'&&!Array.isArray(o))remote=o}catch(e){remote={}}}
+    else if(r.status!==404)throw {status:r.status};
+    const merged=Object.assign({},remote,overrides);
+    const body={message:'Update handover content',content:encodeB64(JSON.stringify(merged,null,1)),branch:gh.branch};
+    if(sha)body.sha=sha;
+    r=await fetch(url,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},hdr),body:JSON.stringify(body)});
+    if(!r.ok)throw {status:r.status};
+    published=merged;overrides={};saveLocal();
+  },'Published. GitHub Pages usually shows the change within a minute or two.');
+  computePages();buildToc();buildIndex();show(current,null,true);
 }
 
 /* ---------- editor ---------- */
@@ -820,6 +865,12 @@ function refreshAll(){
 
 /* ---------- actions ---------- */
 function failMessage(e){
+  if(e&&e.status===401)return 'GitHub did not accept the token. Check it is correct and has not expired.';
+  if(e&&e.status===403)return 'GitHub refused the request. The token may lack Contents read and write access, or GitHub is limiting requests.';
+  if(e&&e.status===404)return 'GitHub could not find that repository or branch, or the token has no access to it.';
+  if(e&&(e.status===409||e.status===422))return 'The content file changed while publishing. Try again.';
+  if(e&&e.status)return 'GitHub returned an error ('+e.status+'). Nothing was published.';
+  if(e instanceof TypeError)return 'Could not reach GitHub. Check your connection. Nothing was published.';
   if(e&&e.code==='storage')return 'This browser blocked saving, so the change was not kept.';
   if(e&&(e.code==='invalid_argument'||e.code==='not_granted'))return 'This page is view-only for you, so the change was not saved. Ask the owner for Contributor access.';
   if(e&&e.code==='quota_exceeded')return 'The page store is full, so the change was not saved.';
@@ -917,6 +968,12 @@ document.addEventListener('click',e=>{
     const n=l.querySelectorAll('.frow');const i=n[n.length-1].querySelector('[data-f="name"]');if(i)i.focus();
   }
   else if(act==='drop-file'){const r=b.closest('.frow');if(r)r.remove()}
+  else if(act==='publish')publishToGitHub(b);
+  else if(act==='gh-forget'){
+    gh.token='';gh.remember=false;
+    try{localStorage.setItem('rh-gh',JSON.stringify({repo:gh.repo,branch:gh.branch,path:gh.path}))}catch(err){}
+    say('Token forgotten.',false);show(current,null,true);
+  }
   else if(act==='save')savePage();
   else if(act==='reset')resetPage();
   else if(act==='add')addPage();
@@ -1023,6 +1080,8 @@ computePages();buildToc();buildIndex();route();
     },err=>{store.note='Shared edits are not available right now.';clearTimeout(timer);refreshAll()});
   }catch(e){
     store.mode='device';loadLocal();
+    try{const r=await fetch('content.json',{cache:'no-store'});
+      if(r.ok){const j=await r.json();if(j&&typeof j==='object'&&!Array.isArray(j))published=j}}catch(err){}
   }
   resolveStore();
   refreshAll();
