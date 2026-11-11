@@ -1092,7 +1092,47 @@
   "order": 110
  },
  "power-bi": {
-  "order": 220
+  "page": {
+   "id": "power-bi",
+   "group": "chapter",
+   "title": "Power BI Projection Update",
+   "status": "draft",
+   "when": "To confirm",
+   "slot": "",
+   "cadence": [
+    "tbc"
+   ],
+   "reviewed": "",
+   "tags": [
+    "dashboard",
+    "power bi",
+    "projection",
+    "report",
+    "imran",
+    "transfer",
+    "in progress"
+   ],
+   "intro": "The Power BI projection file is in the process of being transferred to Imran’s hardware.",
+   "prompts": [],
+   "sections": [],
+   "files": [
+    {
+     "name": "Power BI projection file",
+     "type": "file",
+     "note": "In progress: being transferred to Imran’s hardware",
+     "link": ""
+    }
+   ],
+   "notes": [
+    "In progress: the Power BI file is being transferred to Imran’s hardware."
+   ],
+   "contacts": [
+    {
+     "name": "Imran",
+     "why": "Taking over the Power BI file on his hardware"
+    }
+   ]
+  }
  },
  "weekly-finance-call": {
   "order": 120
