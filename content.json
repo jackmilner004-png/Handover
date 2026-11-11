@@ -70,7 +70,8 @@
      "why": "Can help with any questions on balancing hours on the finance tab"
     }
    ]
-  }
+  },
+  "order": 115
  },
  "std-e2e": {
   "page": {
@@ -156,7 +157,8 @@
      "why": "Sends the STD shipped email on Sundays"
     }
    ]
-  }
+  },
+  "order": 130
  },
  "peak-review": {
   "page": {
@@ -205,7 +207,8 @@
      "why": "Owns the peak review slides and the action log"
     }
    ]
-  }
+  },
+  "order": 140
  },
  "hannah-peak": {
   "page": {
@@ -251,7 +254,8 @@
      "why": "Shares the SB detail with Hannah from the action log"
     }
    ]
-  }
+  },
+  "order": 150
  },
  "cc-forecast": {
   "page": {
@@ -317,7 +321,8 @@
      "why": "May request the C&C forecast"
     }
    ]
-  }
+  },
+  "order": 160
  },
  "planning-review": {
   "page": {
@@ -442,7 +447,8 @@
    ],
    "notes": [],
    "contacts": []
-  }
+  },
+  "order": 180
  },
  "brands-pva": {
   "page": {
@@ -491,7 +497,8 @@
    ],
    "notes": [],
    "contacts": []
-  }
+  },
+  "order": 190
  },
  "start": {
   "deleted": true
@@ -916,7 +923,8 @@
      "why": "Updates the Mint Velvet workforce graph, and typically completes the M&S packs"
     }
    ]
-  }
+  },
+  "order": 100
  },
  "monthly-asda-dpr": {
   "page": {
@@ -1081,6 +1089,21 @@
     }
    ]
   },
-  "order": 115
+  "order": 110
+ },
+ "power-bi": {
+  "order": 220
+ },
+ "weekly-finance-call": {
+  "order": 120
+ },
+ "carrier-forecast": {
+  "order": 170
+ },
+ "doncaster": {
+  "order": 200
+ },
+ "share-caps": {
+  "order": 210
  }
 }
