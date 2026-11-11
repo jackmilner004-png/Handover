@@ -917,5 +917,170 @@
     }
    ]
   }
+ },
+ "monthly-asda-dpr": {
+  "page": {
+   "id": "monthly-asda-dpr",
+   "group": "chapter",
+   "title": "Monthly ASDA DPR",
+   "status": "active",
+   "when": "Monthly, after the monthly packs",
+   "slot": "ASDA downtime slide",
+   "reviewed": "",
+   "intro": "Each month the ASDA downtime slide is built from the downtime export, then its graphs and comments go into the monthly ASDA DPR. The working file is Planning Monthly Packs.",
+   "cadence": [
+    "month"
+   ],
+   "tags": [
+    "asda",
+    "dpr",
+    "downtime",
+    "downtime slide",
+    "downtime log",
+    "pot",
+    "monthly",
+    "brad",
+    "ghazi",
+    "graham",
+    "finance",
+    "fault",
+    "fault descriptions",
+    "man hours",
+    "robot",
+    "engineering",
+    "product",
+    "solution",
+    "area"
+   ],
+   "prompts": [],
+   "sections": [
+    {
+     "h": "1. Get the data into the Downtime Log",
+     "kind": "steps",
+     "note": "",
+     "items": [
+      "Open Planning Monthly Packs",
+      "Brad sends a detailed breakdown of the downtime export, with each instance allocated to a Pot",
+      "Filter the column titled “Parent” to only include “No”",
+      "Copy all the filtered data and paste it into the “Downtime Log” tab",
+      "Check the columns line up when pasting in. Brad’s file has changed, so not all columns match"
+     ]
+    },
+    {
+     "h": "2. Update the Downtime Log and Downtime Slide",
+     "kind": "steps",
+     "note": "",
+     "items": [
+      "In the “Downtime Log” tab, copy and paste the formulas down in columns A to C and Y to AB (don’t worry if these show errors)",
+      "On the “Downtime Slide” tab, update cell L3 to the previous month",
+      "Message Finance / Ghazi for the previous month’s total downtime hours and cost",
+      "Add the total hours from Ghazi into cell U4, and into the corresponding row in column F",
+      "The splits in the slide then populate automatically"
+     ]
+    },
+    {
+     "h": "3. Check the Downtime Area Detail",
+     "kind": "checks",
+     "note": "The Downtime Area Detail section should add up to the total downtime.",
+     "items": [
+      "Downtime Area Detail totals the total downtime",
+      {
+       "t": "If it does not total, check the “Area” column in the “Downtime Log” tab:",
+       "sub": [
+        "It should only include the relevant subtitles",
+        "Change any additional area to “Other”"
+       ]
+      }
+     ]
+    },
+    {
+     "h": "4. Review with Graham",
+     "kind": "steps",
+     "note": "",
+     "items": [
+      "Run through the data with Graham once the slide is complete",
+      "Any extra detail needed, with comments from the warehouse admins, is in the “Downtime Log” tab"
+     ]
+    },
+    {
+     "h": "5. Build the monthly ASDA DPR",
+     "kind": "steps",
+     "note": "",
+     "items": [
+      "Copy a snip of the graphs from the “Downtime Slide” tab and paste them into the monthly ASDA DPR",
+      "Update the comments in the DPR using the comments called out at the bottom right of the “Downtime Slide” sheet"
+     ]
+    },
+    {
+     "h": "6. Fault tables for each Pot",
+     "kind": "steps",
+     "note": "Use the ASDA Fault Descriptions file.",
+     "items": [
+      "Open ASDA Fault Descriptions",
+      "Build 2 small tables, one for each Pot, showing the total hours impacted on each fault",
+      {
+       "t": "Each table lists the top 3 fault causes by man hours (Rank, Fault Cause, Man Hours):",
+       "sub": [
+        "ASDA Product/Solution table",
+        "ASDA Engineering table"
+       ]
+      }
+     ]
+    },
+    {
+     "h": "Example fault tables (from a previous month)",
+     "kind": "bullets",
+     "note": "For layout only. Figures will change each month.",
+     "items": [
+      {
+       "t": "ASDA Product/Solution",
+       "sub": [
+        "1. Abnormal Upward QR code recognition during robot movement: 23.39 man hours",
+        "2. QR Code Issue: 15.17 man hours",
+        "3. Robot Crash: 14.28 man hours"
+       ]
+      },
+      {
+       "t": "ASDA Engineering",
+       "sub": [
+        "1. Driver Tracking Error: 7.69 man hours",
+        "2. Disconnected Robot: 6.27 man hours",
+        "3. Emergency Stop Activation: 4.02 man hours"
+       ]
+      }
+     ]
+    }
+   ],
+   "files": [
+    {
+     "name": "Planning Monthly Packs",
+     "type": "xlsx",
+     "note": "Working file: Downtime Log and Downtime Slide tabs",
+     "link": "https://gxologistics.sharepoint.com/:x:/r/sites/Sherburn/Planning/Shared%20Documents/~%20Planning/Planning%20Team/Jack/Planning%20Monthly%20Packs.xlsx?d=w677bc17bd13646af810fc1735b2b78b3&csf=1&web=1&e=gCxMTB"
+    },
+    {
+     "name": "ASDA Fault Descriptions",
+     "type": "xlsx",
+     "note": "Source for the fault tables",
+     "link": ""
+    }
+   ],
+   "notes": [],
+   "contacts": [
+    {
+     "name": "Brad",
+     "why": "Sends the downtime export with each instance allocated to a Pot"
+    },
+    {
+     "name": "Ghazi (Finance)",
+     "why": "Provides the previous month’s downtime hours and cost total"
+    },
+    {
+     "name": "Graham",
+     "why": "Reviews the downtime data with you once the slide is complete"
+    }
+   ]
+  },
+  "order": 115
  }
 }
